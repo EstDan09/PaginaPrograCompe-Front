@@ -1,0 +1,11 @@
+{
+  "LOGIN": {
+    "TITLE": "Iniciar sesión",
+    "SUBTITLE": "Accedé a tu cuenta",
+    "EMAIL": "Email",
+    "EMAIL_PLACEHOLDER": "tu@email.com",
+    "PASSWORD": "Contraseña",
+    "PASSWORD_PLACEHOLDER": "••••••••",
+    "SUBMIT": "Entrar"
+  }
+}

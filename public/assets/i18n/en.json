@@ -1,0 +1,11 @@
+{
+  "LOGIN": {
+    "TITLE": "Sign in",
+    "SUBTITLE": "Access your account",
+    "EMAIL": "Email",
+    "EMAIL_PLACEHOLDER": "you@email.com",
+    "PASSWORD": "Password",
+    "PASSWORD_PLACEHOLDER": "••••••••",
+    "SUBMIT": "Log in"
+  }
+}
