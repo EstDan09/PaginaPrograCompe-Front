@@ -2,24 +2,29 @@ import { Routes } from "@angular/router";
 import { UserLayout } from "./pages/user-layout/user-layout";
 
 export const User_Routes: Routes = [
-    {
+  {
+    path: '',
+    component: UserLayout,
+    children: [
+      {
         path: '',
-        component: UserLayout,
-        children: [
-            {
-                path: '',
-                loadComponent: () =>
-                    import('./pages/home/home').then(m =>  m.Home)
-            },
-            {
-                path: 'profile',
-                loadComponent: () =>
-                    import('./pages/profile/profile').then(m =>  m.Profile)
-            },
-            { 
-                path: '**', 
-                redirectTo: '' 
-            },
-        ]
-    }
+        loadComponent: () =>
+          import('./pages/home/home').then(m => m.Home)
+      },
+      {
+        path: 'profile',
+        loadComponent: () =>
+          import('./pages/profile/profile').then(m => m.Profile)
+      },
+      {
+        path: 'assignment/:id',
+        loadComponent: () =>
+          import('./pages/assignment/assignment').then(m => m.Assignment)
+      },
+      {
+        path: '**',
+        redirectTo: ''
+      },
+    ]
+  }
 ];
