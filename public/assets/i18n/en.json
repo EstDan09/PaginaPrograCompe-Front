@@ -6,6 +6,7 @@
     "EMAIL_PLACEHOLDER": "you@email.com",
     "PASSWORD": "Password",
     "PASSWORD_PLACEHOLDER": "••••••••",
-    "SUBMIT": "Log in"
+    "SUBMIT": "Log in",
+    "CREATE_ACCOUNT": "Create account"
   }
 }
