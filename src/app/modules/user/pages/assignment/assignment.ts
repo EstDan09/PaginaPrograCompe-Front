@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { IAssignment, IExcerice } from '../../../../models/assignment.model';
-import { AssignmentService } from '../../../../services/assignment';
+import { AssignmentService } from '../../../../services/assignment.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
