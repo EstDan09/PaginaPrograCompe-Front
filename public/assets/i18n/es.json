@@ -6,6 +6,8 @@
     "EMAIL_PLACEHOLDER": "tu@email.com",
     "PASSWORD": "Contraseña",
     "PASSWORD_PLACEHOLDER": "••••••••",
-    "SUBMIT": "Entrar"
+    "SUBMIT": "Entrar",
+    "CREATE_ACCOUNT": "Crear cuenta"
+
   }
 }

@@ -1,5 +1,5 @@
 <div class="page">
-  <form class="card">
+  <form class="card" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <h1>{{ "LOGIN.TITLE" | translate }}</h1>
     <p class="subtitle">{{ "LOGIN.SUBTITLE" | translate }}</p>
 
@@ -8,6 +8,7 @@
       <input
         type="email"
         autocomplete="email"
+        formControlName="email"
         [placeholder]="'LOGIN.EMAIL_PLACEHOLDER' | translate"
       />
     </label>
@@ -17,10 +18,14 @@
       <input
         type="password"
         autocomplete="current-password"
+        formControlName="password"
         [placeholder]="'LOGIN.PASSWORD_PLACEHOLDER' | translate"
       />
     </label>
 
     <button type="submit">{{ "LOGIN.SUBMIT" | translate }}</button>
   </form>
+
+  <button type="button" (click)="onCreateAccount()">{{ "LOGIN.CREATE_ACCOUNT" | translate }}</button>
+
 </div>
