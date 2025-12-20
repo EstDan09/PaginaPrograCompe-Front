@@ -1,1 +1,7 @@
-<p>{{ assignment?._id }} {{ assignment?.description}}</p>
+<div class="page">
+  <div class="card">
+    <h1>Assignment ID: {{ assignment?._id }}</h1>
+    <p>Description: {{ assignment?.description }}</p>
+    <p>Due before: {{ assignment?.dueDate }}</p>
+  </div>
+</div>
