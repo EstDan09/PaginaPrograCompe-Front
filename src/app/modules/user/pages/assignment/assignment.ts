@@ -1,12 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { IAssignment, IExercise } from '../../../../models/assignment.model';
-import { Exercise } from '../exercise/exercise';
 import { AssignmentService } from '../../../../services/assignment.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-assignment',
-  imports: [Exercise],
+  imports: [],
   templateUrl: './assignment.html',
   styleUrl: './assignment.scss',
 })
