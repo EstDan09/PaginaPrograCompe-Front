@@ -3,9 +3,12 @@
     <h1>Assignment ID: {{ assignment?._id }}</h1>
     <p>Description: {{ assignment?.description }}</p>
     <p>Due before: {{ assignment?.dueDate }}</p>
+    <h2>Assigned problems</h2>
     <div class="exercises">
       @for (exercise of assignment?.exercises; track $index) {
-      <app-exercise [exercise]="exercise" />
+        <h3>
+          {{ exercise.problem_id }}
+        </h3>
       }
     </div>
   </div>
