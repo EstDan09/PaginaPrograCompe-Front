@@ -1,1 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
+$font-sans: 'Inter', 'Roboto', 'Open Sans', system-ui, sans-serif;
+
+:root {
+  --primary-color: #1ED7C7;
+  --secondary-color: #8B89E6;
+  --accent-color: #e8e7fa;
+  --shadow-color: #E8E8E8;
+  font-family: $font-sans;
+}
