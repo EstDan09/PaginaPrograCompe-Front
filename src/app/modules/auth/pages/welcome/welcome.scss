@@ -17,64 +17,33 @@
 
 .card {
   width: 100%;
-  max-width: 420px;
-  padding: 24px;
+  max-width: 520px;
+  padding: 26px;
   border-radius: 18px;
   background: #fff;
+  border: 1px solid rgba(0,0,0,0.06);
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.10);
   display: grid;
-  gap: 14px;
+  gap: 16px;
   overflow: hidden;
-  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .header {
   display: grid;
-  gap: 6px;
+  gap: 8px;
 }
 
 h1 {
   margin: 0;
-  font-size: 26px;
+  font-size: 28px;
   letter-spacing: -0.02em;
 }
 
 .subtitle {
   margin: 0;
-  opacity: 0.75;
-  font-size: 0.95rem;
-  line-height: 1.35;
-}
-
-.field {
-  display: grid;
-  gap: 6px;
-
-  span {
-    font-size: 0.9rem;
-    opacity: 0.85;
-  }
-}
-
-input {
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  outline: none;
-  background: #fff;
-
-  &:focus {
-    border-color: rgba(0, 0, 0, 0.35);
-    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.06);
-  }
-}
-
-.error {
-  margin-top: 2px;
-  font-size: 0.82rem;
-  line-height: 1.25;
-  color: #b42318; /* rojo suave */
+  opacity: 0.78;
+  font-size: 0.98rem;
+  line-height: 1.45;
 }
 
 .actions {
@@ -84,23 +53,21 @@ input {
 }
 
 .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+
   width: 100%;
   padding: 12px 14px;
   border-radius: 12px;
   border: 0;
   cursor: pointer;
-  font-weight: 700;
+  font-weight: 800;
   transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
 
   &:active {
     transform: translateY(1px);
-  }
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
   }
 }
 
@@ -116,10 +83,22 @@ input {
 .btn-ghost {
   background: transparent;
   color: #111827;
-  border: 1px solid rgba(0, 0, 0, 0.14);
+  border: 1px solid rgba(0,0,0,0.14);
 
   &:hover {
-    background: rgba(0, 0, 0, 0.03);
+    background: rgba(0,0,0,0.03);
+  }
+}
+
+.footer {
+  margin-top: 6px;
+  font-size: 0.9rem;
+  opacity: 0.75;
+  line-height: 1.4;
+
+  .hint {
+    font-weight: 700;
+    opacity: 0.9;
   }
 }
 
@@ -136,7 +115,7 @@ input {
   }
 
   h1 {
-    font-size: 22px;
+    font-size: 24px;
   }
 }
 
@@ -150,13 +129,8 @@ input {
     border-radius: 14px;
   }
 
-  input,
   .btn {
     padding: 11px 12px;
     border-radius: 10px;
-  }
-
-  .field span {
-    font-size: 0.85rem;
   }
 }
