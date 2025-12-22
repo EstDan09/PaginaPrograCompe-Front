@@ -1,9 +1,32 @@
-<p>user-layout works!</p>
-<!-- header/nav del layout -->
-<nav>
-  <a routerLink="/user">Home</a>
-  <a routerLink="/user/profile">Profile</a>
+<nav class="topbar">
+  <div class="tabs">
+    <a routerLink="/user" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+      Home
+    </a>
+
+    <a [routerLink]="myStatsLink()" routerLinkActive="active">
+      Estadísticas
+    </a>
+
+    <a [routerLink]="myGroupsLink()" routerLinkActive="active">
+      Equipos
+    </a>
+
+    <a routerLink="/user/profile" routerLinkActive="active">
+      Perfil
+    </a>
+  </div>
+
+  <div class="right">
+    @if (user()) {
+      <span class="user">👤 {{ user()!.username }}</span>
+      <button class="btn-ghost" type="button" (click)="onLogout()">Salir</button>
+    } @else {
+      <a class="btn-ghost" routerLink="/auth">Inicie sesión</a>
+    }
+  </div>
 </nav>
 
-<!-- AQUÍ se pinta la página hija -->
-<router-outlet></router-outlet>
+<main class="content">
+  <router-outlet></router-outlet>
+</main>

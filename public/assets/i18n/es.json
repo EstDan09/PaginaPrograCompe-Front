@@ -8,6 +8,27 @@
     "PASSWORD_PLACEHOLDER": "••••••••",
     "SUBMIT": "Entrar",
     "CREATE_ACCOUNT": "Crear cuenta"
-
+  },
+  "CREATE_USER": {
+    "TITLE": "Crear cuenta",
+    "SUBTITLE": "Completá tus datos para registrarte",
+    "EMAIL": "Email",
+    "EMAIL_PLACEHOLDER": "tu@email.com",
+    "USERNAME": "Usuario",
+    "USERNAME_PLACEHOLDER": "tu_usuario",
+    "PASSWORD": "Contraseña",
+    "PASSWORD_PLACEHOLDER": "••••••••",
+    "CONFIRM_PASSWORD": "Confirmar contraseña",
+    "CONFIRM_PASSWORD_PLACEHOLDER": "••••••••",
+    "SUBMIT": "Crear cuenta",
+    "GO_TO_LOGIN": "Volver a iniciar sesión",
+    "ERROR_EMAIL_REQUIRED": "El email es obligatorio.",
+    "ERROR_EMAIL_INVALID": "Ingresá un email válido.",
+    "ERROR_USERNAME_REQUIRED": "El usuario es obligatorio.",
+    "ERROR_USERNAME_MIN": "El usuario debe tener al menos 3 caracteres.",
+    "ERROR_PASSWORD_REQUIRED": "La contraseña es obligatoria.",
+    "ERROR_PASSWORD_MIN": "La contraseña debe tener al menos 6 caracteres.",
+    "ERROR_CONFIRM_REQUIRED": "Confirmá tu contraseña.",
+    "ERROR_PASSWORDS_MISMATCH": "Las contraseñas no coinciden."
   }
 }

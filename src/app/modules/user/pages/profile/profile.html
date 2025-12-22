@@ -1,1 +1,57 @@
-<p>profile works!</p>
+<div class="page">
+  <section class="card">
+    <header class="header">
+      <h1>Perfil</h1>
+      <p class="subtitle">Información de tu cuenta</p>
+    </header>
+
+    @if (user(); as u) {
+      <div class="rows">
+        <div class="row">
+          <span class="label">Nombre de usuario</span>
+          <span class="value">{{ username() }}</span>
+        </div>
+
+        <div class="row">
+          <span class="label">Email</span>
+          <span class="value">{{ email() }}</span>
+        </div>
+
+        <div class="row">
+          <span class="label">ID</span>
+          <span class="value mono">{{ userId() }}</span>
+        </div>
+
+        <div class="row">
+          <span class="label">Rol</span>
+          <span class="value">{{ role() }}</span>
+        </div>
+
+        <div class="row">
+          <span class="label">Grupos</span>
+          <span class="value">{{ groupsCount() }}</span>
+        </div>
+      </div>
+
+      @if (groupsCount() > 0) {
+        <div class="groups">
+          <h2>Mis grupos</h2>
+
+          <ul class="group-list">
+            @for (g of groups(); track g._id) {
+              <li class="group-item">
+                <span class="dot"></span>
+                <span class="group-name">{{ g.name }}</span>
+              </li>
+            }
+          </ul>
+        </div>
+      }
+    } @else {
+      <div class="empty">
+        <div class="empty-title">No hay sesión activa</div>
+        <p class="empty-text">Iniciá sesión para ver tu perfil.</p>
+      </div>
+    }
+  </section>
+</div>

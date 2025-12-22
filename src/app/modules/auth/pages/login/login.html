@@ -1,7 +1,9 @@
 <div class="page">
   <form class="card" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-    <h1>{{ "LOGIN.TITLE" | translate }}</h1>
-    <p class="subtitle">{{ "LOGIN.SUBTITLE" | translate }}</p>
+    <header class="header">
+      <h1>{{ "LOGIN.TITLE" | translate }}</h1>
+      <p class="subtitle">{{ "LOGIN.SUBTITLE" | translate }}</p>
+    </header>
 
     <label class="field">
       <span>{{ "LOGIN.EMAIL" | translate }}</span>
@@ -23,9 +25,14 @@
       />
     </label>
 
-    <button type="submit">{{ "LOGIN.SUBMIT" | translate }}</button>
+    <div class="actions">
+      <button class="btn btn-primary" type="submit">
+        {{ "LOGIN.SUBMIT" | translate }}
+      </button>
+
+      <button class="btn btn-ghost" type="button" (click)="onCreateAccount()">
+        {{ "LOGIN.CREATE_ACCOUNT" | translate }}
+      </button>
+    </div>
   </form>
-
-  <button type="button" (click)="onCreateAccount()">{{ "LOGIN.CREATE_ACCOUNT" | translate }}</button>
-
 </div>
