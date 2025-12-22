@@ -30,5 +30,23 @@
     "ERROR_PASSWORD_MIN": "La contraseña debe tener al menos 6 caracteres.",
     "ERROR_CONFIRM_REQUIRED": "Confirmá tu contraseña.",
     "ERROR_PASSWORDS_MISMATCH": "Las contraseñas no coinciden."
+  },
+  "ASSIGNMENT": {
+    "TITLE": "Tarea",
+    "DESCRIPTION": "Descripción",
+    "DUE_BEFORE": "Fecha límite",
+    "ASSIGNED_PROBLEMS": "Ejercicios asignados",
+    "PROBLEM_ID": "ID del problema",
+    "NOT_FOUND_TITLE": "No se encontró la tarea",
+    "NOT_FOUND_TEXT": "Revisá el enlace o volvé atrás."
+  },
+  "GROUP": {
+    "TITLE": "Grupo",
+    "MEMBERS_COUNT": "Miembros: {{count}}",
+    "NO_MEMBERS": "Este grupo todavía no tiene miembros.",
+    "NOT_FOUND": "No se encontró el grupo."
+  },
+  "MY_GROUPS": {
+    "TITLE": "Mis grupos"
   }
 }
