@@ -1,0 +1,10 @@
+<div class="page">
+  <h2>Group: {{ group?._id }}</h2>
+  <div class="card">
+    @for(student of group?.members; track $index) {
+    <p>
+      {{ student.username }}
+    </p>
+    }
+  </div>
+</div>
