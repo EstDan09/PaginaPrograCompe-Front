@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { GroupService } from '../../../../services/group.service';
+import { IGroup } from '../../../../models/group.model';
 
 @Component({
   selector: 'app-my-groups',
@@ -7,5 +10,14 @@ import { Component } from '@angular/core';
   styleUrl: './my-groups.scss',
 })
 export class MyGroups {
+  route = inject(ActivatedRoute);
+  groupService = inject(GroupService);
+  groupList!: IGroup[] | undefined;
 
+  constructor() {
+    const userId: string = this.route.snapshot.params['id'];
+    this.groupList = this.groupService.getMyGroups(userId);
+  }
 }
+
+

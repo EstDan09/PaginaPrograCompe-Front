@@ -5,6 +5,8 @@ import { IUser } from '../models/user.model';
 @Injectable({
   providedIn: 'root',
 })
+
+//All this data will go once the service can serve from API
 export class GroupService {
   students: IUser[] = [
     {
@@ -36,14 +38,28 @@ export class GroupService {
   groups: IGroup[] = [
     {
       _id: "0",
-      name: "bruh",
+      name: "Analisis de datos",
+      creator_id: "0",
+      members: this.students,
+      assignments: []
+    },
+    {
+      _id: "0",
+      name: "Todo es mental",
+      creator_id: "0",
+      members: this.students,
+      assignments: []
+    },
+    {
+      _id: "0",
+      name: "tec-alajuela",
       creator_id: "0",
       members: this.students,
       assignments: []
     }
   ]
   getMyGroups(id: string) {
-    return this.groups.find((g) => g._id === id)
+    return this.groups.filter((g) => g._id === id)
   }
 
 }

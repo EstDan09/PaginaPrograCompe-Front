@@ -1,0 +1,37 @@
+.page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 10fr;
+  justify-items: center;
+  align-items: start;
+  padding: 14px;
+  font-family: "Arial";
+}
+
+.title-container {
+
+  width: 100%;
+  padding: 20px;
+}
+
+.sec-title {}
+
+.groups {
+  width: 100%;
+  padding: 24px;
+  gap: 20px;
+  border-radius: 18px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+  display: grid;
+  background: white;
+
+}
+
+.card {
+  padding: 14px;
+  border-radius: 18px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+  display: grid;
+  gap: 14px;
+  background: white;
+}
