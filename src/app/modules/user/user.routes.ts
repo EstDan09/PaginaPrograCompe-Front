@@ -27,6 +27,11 @@ export const User_Routes: Routes = [
           import('./pages/my-groups/my-groups').then(m => m.MyGroups)
       },
       {
+        path: 'group/:id',
+        loadComponent: () =>
+          import('./pages/group/group').then(m => m.Group)
+      },
+      {
         path: '**',
         redirectTo: ''
       },

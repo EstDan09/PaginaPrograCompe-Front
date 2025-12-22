@@ -44,20 +44,25 @@ export class GroupService {
       assignments: []
     },
     {
-      _id: "0",
+      _id: "1",
       name: "Todo es mental",
       creator_id: "0",
       members: this.students,
       assignments: []
     },
     {
-      _id: "0",
+      _id: "2",
       name: "tec-alajuela",
       creator_id: "0",
       members: this.students,
       assignments: []
     }
   ]
+
+  getGroupById(id: string) {
+    return this.groups.find((g) => g._id === id);
+  }
+
   getMyGroups(id: string) {
     return this.groups.filter((g) => g._id === id)
   }
