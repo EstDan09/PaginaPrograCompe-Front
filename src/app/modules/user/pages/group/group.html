@@ -1,5 +1,5 @@
 <div class="page">
-  <h2>Group: {{ group?._id }}</h2>
+  <h2>{{ "GROUP.TITLE" | translate }}: {{ group?._id }}</h2>
   <div class="card">
     @for(student of group?.members; track $index) {
     <p>

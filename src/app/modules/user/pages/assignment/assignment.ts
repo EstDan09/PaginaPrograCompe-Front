@@ -1,24 +1,24 @@
 import { Component, inject } from '@angular/core';
-import { IAssignment, IExercise } from '../../../../models/assignment.model';
+import { DatePipe } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
+import { IAssignment } from '../../../../models/assignment.model';
 import { AssignmentService } from '../../../../services/assignment.service';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-assignment',
-  imports: [],
+  imports: [TranslatePipe, DatePipe],
   templateUrl: './assignment.html',
   styleUrl: './assignment.scss',
 })
 export class Assignment {
-  route: ActivatedRoute = inject(ActivatedRoute);
-  assignmentService: AssignmentService = inject(AssignmentService);
-  assignment!: IAssignment | undefined;
+  private route = inject(ActivatedRoute);
+  private assignmentService = inject(AssignmentService);
 
+  assignment: IAssignment | undefined;
 
   constructor() {
     const assignmentId: string = this.route.snapshot.params['id'];
     this.assignment = this.assignmentService.getAssignmentById(assignmentId);
   }
-
-
 }

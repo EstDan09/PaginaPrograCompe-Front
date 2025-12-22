@@ -1,15 +1,36 @@
 <div class="page">
   <div class="card">
-    <h1>Assignment ID: {{ assignment?._id }}</h1>
-    <p>Description: {{ assignment?.description }}</p>
-    <p>Due before: {{ assignment?.dueDate }}</p>
-    <h2>Assigned problems</h2>
-    <div class="exercises">
-      @for (exercise of assignment?.exercises; track $index) {
-        <h3>
-          {{ exercise.problem_id }}
-        </h3>
-      }
-    </div>
+    @if (assignment) {
+      <h1>
+        {{ "ASSIGNMENT.TITLE" | translate }}: {{ assignment._id }}
+      </h1>
+
+      <p>
+        <strong>{{ "ASSIGNMENT.DESCRIPTION" | translate }}:</strong>
+        {{ assignment.description }}
+      </p>
+
+      <p>
+        <strong>{{ "ASSIGNMENT.DUE_BEFORE" | translate }}:</strong>
+        {{ assignment.dueDate | date:'mediumDate' }}
+      </p>
+
+      <h2>{{ "ASSIGNMENT.ASSIGNED_PROBLEMS" | translate }}</h2>
+
+      <div class="exercises">
+        @for (exercise of assignment.exercises; track $index) {
+          <div class="exercise">
+            <h3>
+              {{ "ASSIGNMENT.PROBLEM_ID" | translate }}: {{ exercise.problem_id }}
+            </h3>
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="empty">
+        <div class="empty-title">{{ "ASSIGNMENT.NOT_FOUND_TITLE" | translate }}</div>
+        <p class="empty-text">{{ "ASSIGNMENT.NOT_FOUND_TEXT" | translate }}</p>
+      </div>
+    }
   </div>
 </div>
