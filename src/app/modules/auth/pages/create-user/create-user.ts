@@ -30,6 +30,7 @@ export class CreateUser {
     {
       email: ['', [Validators.required, Validators.email]],
       username: ['', [Validators.required, Validators.minLength(3)]],
+      role: ['student', [Validators.required]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]],
     },
@@ -46,7 +47,20 @@ export class CreateUser {
     return;
   }
 
-  console.log(this.createUserForm.value);
+  const { username, password, role, email } = this.createUserForm.value;
+
+  this._authService.register({
+    username: username!,
+    password: password!,
+    role: role as 'student' | 'coach',
+    email: email!,
+  }).subscribe((user) => {
+    if (user) {
+      this._router.navigate(['/user']);
+    } else {
+      console.log('Register failed');
+    }
+  });
 
 }
 
