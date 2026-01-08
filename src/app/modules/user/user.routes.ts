@@ -35,6 +35,11 @@ export const User_Routes: Routes = [
         path: '**',
         redirectTo: ''
       },
+      {
+        path: 'following',
+        loadComponent: () =>
+          import('./pages/following/following').then(m => m.Following)
+      }
     ]
   }
 ];
