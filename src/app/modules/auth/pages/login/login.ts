@@ -19,7 +19,7 @@ export class Login {
   private _authService = inject(AuthService);
 
   loginForm = this._formBuilder.group({
-    email: ['', [Validators.required, Validators.email]],
+    username: ['', [Validators.required]],
     password: ['', [Validators.required, Validators.minLength(6)]],
   });
 
@@ -28,22 +28,21 @@ export class Login {
   }
 
   onSubmit() {
-    if (this.loginForm.invalid) {
-      console.log('Form is invalid');
-      return;
-    }
-
-    const formData = this.loginForm.value;
-    console.log('Email:', formData.email);
-    console.log('Password:', formData.password);
-
-    const loginSuccess = this._authService.login(formData.email!, formData.password!);
-    if (loginSuccess) { 
-      this._router.navigate(['/user']);
-    }
-
-    
+  if (this.loginForm.invalid) {
+    this.loginForm.markAllAsTouched();
+    return;
   }
+
+  const { username, password } = this.loginForm.value;
+
+  this._authService.login(username!, password!).subscribe((user) => {
+    if (user) {
+      this._router.navigate(['/user']);
+    } else {
+      console.log('Credenciales inválidas');
+    }
+  });
+}
 
   onCreateAccount() {
     this._router.navigate(['/auth/create-user']);

@@ -1,13 +1,13 @@
 <div class="page">
   <form class="card" [formGroup]="createUserForm" (ngSubmit)="onSubmit()">
     <header class="header">
-      <h1>{{ "CREATE_USER.TITLE" | translate }}</h1>
-      <p class="subtitle">{{ "CREATE_USER.SUBTITLE" | translate }}</p>
+      <h1>{{ 'CREATE_USER.TITLE' | translate }}</h1>
+      <p class="subtitle">{{ 'CREATE_USER.SUBTITLE' | translate }}</p>
     </header>
 
     <!-- EMAIL -->
     <label class="field">
-      <span>{{ "CREATE_USER.EMAIL" | translate }}</span>
+      <span>{{ 'CREATE_USER.EMAIL' | translate }}</span>
       <input
         type="email"
         autocomplete="email"
@@ -15,20 +15,28 @@
         [placeholder]="'CREATE_USER.EMAIL_PLACEHOLDER' | translate"
       />
 
-      <small class="error"
-        *ngIf="createUserForm.get('email')?.touched && createUserForm.get('email')?.hasError('required')">
-        {{ "CREATE_USER.ERROR_EMAIL_REQUIRED" | translate }}
+      <small
+        class="error"
+        *ngIf="
+          createUserForm.get('email')?.touched && createUserForm.get('email')?.hasError('required')
+        "
+      >
+        {{ 'CREATE_USER.ERROR_EMAIL_REQUIRED' | translate }}
       </small>
 
-      <small class="error"
-        *ngIf="createUserForm.get('email')?.touched && createUserForm.get('email')?.hasError('email')">
-        {{ "CREATE_USER.ERROR_EMAIL_INVALID" | translate }}
+      <small
+        class="error"
+        *ngIf="
+          createUserForm.get('email')?.touched && createUserForm.get('email')?.hasError('email')
+        "
+      >
+        {{ 'CREATE_USER.ERROR_EMAIL_INVALID' | translate }}
       </small>
     </label>
 
     <!-- USERNAME -->
     <label class="field">
-      <span>{{ "CREATE_USER.USERNAME" | translate }}</span>
+      <span>{{ 'CREATE_USER.USERNAME' | translate }}</span>
       <input
         type="text"
         autocomplete="username"
@@ -36,20 +44,49 @@
         [placeholder]="'CREATE_USER.USERNAME_PLACEHOLDER' | translate"
       />
 
-      <small class="error"
-        *ngIf="createUserForm.get('username')?.touched && createUserForm.get('username')?.hasError('required')">
-        {{ "CREATE_USER.ERROR_USERNAME_REQUIRED" | translate }}
+      <small
+        class="error"
+        *ngIf="
+          createUserForm.get('username')?.touched &&
+          createUserForm.get('username')?.hasError('required')
+        "
+      >
+        {{ 'CREATE_USER.ERROR_USERNAME_REQUIRED' | translate }}
       </small>
 
-      <small class="error"
-        *ngIf="createUserForm.get('username')?.touched && createUserForm.get('username')?.hasError('minlength')">
-        {{ "CREATE_USER.ERROR_USERNAME_MIN" | translate }}
+      <small
+        class="error"
+        *ngIf="
+          createUserForm.get('username')?.touched &&
+          createUserForm.get('username')?.hasError('minlength')
+        "
+      >
+        {{ 'CREATE_USER.ERROR_USERNAME_MIN' | translate }}
+      </small>
+    </label>
+
+    <!-- ROLE -->
+    <label class="field">
+      <span>{{ 'CREATE_USER.ROLE' | translate }}</span>
+
+      <select formControlName="role">
+        <option value="student">student</option>
+        <option value="coach">coach</option>
+      </select>
+
+      <small
+        class="error"
+        *ngIf="
+          createUserForm.get('role')?.touched && createUserForm.get('role')?.hasError('required')
+        "
+      >
+        {{ 'CREATE_USER.ERROR_ROLE_REQUIRED' | translate }}
       </small>
     </label>
 
     <!-- PASSWORD -->
     <label class="field">
-      <span>{{ "CREATE_USER.PASSWORD" | translate }}</span>
+      <span>{{ 'CREATE_USER.PASSWORD' | translate }}</span>
       <input
         type="password"
         autocomplete="new-password"
@@ -57,20 +94,30 @@
         [placeholder]="'CREATE_USER.PASSWORD_PLACEHOLDER' | translate"
       />
 
-      <small class="error"
-        *ngIf="createUserForm.get('password')?.touched && createUserForm.get('password')?.hasError('required')">
-        {{ "CREATE_USER.ERROR_PASSWORD_REQUIRED" | translate }}
+      <small
+        class="error"
+        *ngIf="
+          createUserForm.get('password')?.touched &&
+          createUserForm.get('password')?.hasError('required')
+        "
+      >
+        {{ 'CREATE_USER.ERROR_PASSWORD_REQUIRED' | translate }}
       </small>
 
-      <small class="error"
-        *ngIf="createUserForm.get('password')?.touched && createUserForm.get('password')?.hasError('minlength')">
-        {{ "CREATE_USER.ERROR_PASSWORD_MIN" | translate }}
+      <small
+        class="error"
+        *ngIf="
+          createUserForm.get('password')?.touched &&
+          createUserForm.get('password')?.hasError('minlength')
+        "
+      >
+        {{ 'CREATE_USER.ERROR_PASSWORD_MIN' | translate }}
       </small>
     </label>
 
     <!-- CONFIRM PASSWORD -->
     <label class="field">
-      <span>{{ "CREATE_USER.CONFIRM_PASSWORD" | translate }}</span>
+      <span>{{ 'CREATE_USER.CONFIRM_PASSWORD' | translate }}</span>
       <input
         type="password"
         autocomplete="new-password"
@@ -78,24 +125,31 @@
         [placeholder]="'CREATE_USER.CONFIRM_PASSWORD_PLACEHOLDER' | translate"
       />
 
-      <small class="error"
-        *ngIf="createUserForm.get('confirmPassword')?.touched && createUserForm.get('confirmPassword')?.hasError('required')">
-        {{ "CREATE_USER.ERROR_CONFIRM_REQUIRED" | translate }}
+      <small
+        class="error"
+        *ngIf="
+          createUserForm.get('confirmPassword')?.touched &&
+          createUserForm.get('confirmPassword')?.hasError('required')
+        "
+      >
+        {{ 'CREATE_USER.ERROR_CONFIRM_REQUIRED' | translate }}
       </small>
 
-      <small class="error"
-        *ngIf="createUserForm.get('confirmPassword')?.touched && passwordsMismatch">
-        {{ "CREATE_USER.ERROR_PASSWORDS_MISMATCH" | translate }}
+      <small
+        class="error"
+        *ngIf="createUserForm.get('confirmPassword')?.touched && passwordsMismatch"
+      >
+        {{ 'CREATE_USER.ERROR_PASSWORDS_MISMATCH' | translate }}
       </small>
     </label>
 
     <div class="actions">
       <button class="btn btn-primary" type="submit">
-        {{ "CREATE_USER.SUBMIT" | translate }}
+        {{ 'CREATE_USER.SUBMIT' | translate }}
       </button>
 
       <button class="btn btn-ghost" type="button" (click)="goToLogin()">
-        {{ "CREATE_USER.GO_TO_LOGIN" | translate }}
+        {{ 'CREATE_USER.GO_TO_LOGIN' | translate }}
       </button>
     </div>
   </form>
