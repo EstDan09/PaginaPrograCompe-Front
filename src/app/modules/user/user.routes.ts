@@ -31,15 +31,18 @@ export const User_Routes: Routes = [
         loadComponent: () =>
           import('./pages/group/group').then(m => m.Group)
       },
-      {
-        path: '**',
-        redirectTo: ''
-      },
+
       {
         path: 'following',
         loadComponent: () =>
           import('./pages/following/following').then(m => m.Following)
-      }
+      },
+
+      {
+        path: '**',
+        redirectTo: ''
+      },
+
     ]
   }
 ];

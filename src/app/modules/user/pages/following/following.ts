@@ -12,19 +12,20 @@ import { FollowingService } from '../../../../services/following.service';
 })
 export class Following {
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
+  private _followingService: FollowingService = inject(FollowingService);
   following: IFollowingList | undefined;
-  followingService: FollowingService = inject(FollowingService);
 
 
   constructor() {
-    // this.followingService
-    //   .getFollowing()
-    //   .then((follwingList : IFollowingList) => {
-    //     this.following = follwingList;
-    //     this.changeDetectorRef.markForCheck();
-    //   })
+    this._followingService.getFollowing().subscribe((following) => {
+      if(following) {
+        this.following = following;
+      }
+      else {
+        console.log("FAILED TO LOAD FRIENDS");
+      }
 
-
+    });
   }
 
 
