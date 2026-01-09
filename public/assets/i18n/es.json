@@ -48,5 +48,8 @@
   },
   "MY_GROUPS": {
     "TITLE": "Mis grupos"
+  },
+  "FOLLOWING": {
+    "FOLLOW_TITLE": "Seguidos"
   }
 }
