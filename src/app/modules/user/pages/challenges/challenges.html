@@ -1,0 +1,62 @@
+<div class="page">
+  <section class="card">
+    <header class="header">
+      <h1>Challenges</h1>
+      <p class="subtitle">Tus retos de Codeforces</p>
+    </header>
+
+    @if (user()) {
+      <div class="grid">
+
+        <!-- No completados -->
+        <div class="column">
+          <h2>No completados</h2>
+
+          @if (pendingChallenges().length > 0) {
+            <ul class="challenge-list">
+              @for (c of pendingChallenges(); track c._id) {
+                <li class="challenge-item">
+                  <span class="code">{{ c.cf_code }}</span>
+
+                  <button
+                    class="btn"
+                    (click)="markAsCompleted(c._id)">
+                    Marcar como completado
+                  </button>
+                </li>
+              }
+            </ul>
+          } @else {
+            <p class="empty-text">No hay challenges pendientes</p>
+          }
+        </div>
+
+        <!-- Completados -->
+        <div class="column">
+          <h2>Completados</h2>
+
+          @if (completedChallenges().length > 0) {
+            <ul class="challenge-list completed">
+              @for (c of completedChallenges(); track c._id) {
+                <li class="challenge-item">
+                  <span class="code">{{ c.cf_code }}</span>
+                  <span class="check">✔</span>
+                </li>
+              }
+            </ul>
+          } @else {
+            <p class="empty-text">Aún no completaste ninguno</p>
+          }
+        </div>
+
+      </div>
+    } @else {
+      <div class="empty">
+        <div class="empty-title">No hay sesión activa</div>
+        <p class="empty-text">
+          Iniciá sesión para ver tus challenges.
+        </p>
+      </div>
+    }
+  </section>
+</div>

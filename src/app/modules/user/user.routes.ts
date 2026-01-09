@@ -32,6 +32,11 @@ export const User_Routes: Routes = [
           import('./pages/group/group').then(m => m.Group)
       },
       {
+        path: 'challenges',
+        loadComponent: () =>
+          import('./pages/challenges/challenges').then(m => m.Challenges)
+      },
+      {
         path: '**',
         redirectTo: ''
       },
