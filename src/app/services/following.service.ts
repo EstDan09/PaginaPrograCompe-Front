@@ -23,4 +23,13 @@ export class FollowingService {
     );
   }
 
+  getFollowingNames(following: IFollowingList | null) {
+    if (!following) {
+      console.log("There is no friend list");
+      return;
+    }
+
+
+  }
+
 }
