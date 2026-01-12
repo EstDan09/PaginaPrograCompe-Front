@@ -18,6 +18,9 @@
     <a routerLink="/user/challenges" routerLinkActive="active">
       Retos
     </a>
+    <a routerLink="/auth/verification" routerLinkActive="active">
+      Verificación
+    </a>
   </div>
 
   <div class="right">
@@ -25,7 +28,7 @@
       <span class="user">👤 {{ user()!.username }}</span>
       <button class="btn-ghost" type="button" (click)="onLogout()">Salir</button>
     } @else {
-      <a class="btn-ghost" routerLink="/auth">Inicie sesión</a>
+      <a class="btn-ghost" routerLink="/auth/login">Inicie sesión</a>
     }
   </div>
 </nav>

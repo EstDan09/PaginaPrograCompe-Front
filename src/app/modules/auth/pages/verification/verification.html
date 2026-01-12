@@ -1,0 +1,128 @@
+<div class="page">
+  <section class="card">
+    <header class="header">
+      <h1>Verificación</h1>
+      <p class="subtitle">Conectá y verificá tu cuenta de Codeforces</p>
+    </header>
+
+    @if (!user()) {
+      <div class="empty">
+        <div class="empty-title">No hay sesión activa</div>
+        <p class="empty-text">Iniciá sesión para verificar tu cuenta.</p>
+      </div>
+    } @else {
+
+      @if (loading()) {
+        <p class="hint">Cargando...</p>
+      }
+
+      @if (error()) {
+        <p class="msg error">{{ error() }}</p>
+      }
+
+      @if (account(); as acc) {
+
+        <div class="status">
+          <div class="row">
+            <span class="label">Handle</span>
+            <span class="value mono">{{ acc.cf_account }}</span>
+          </div>
+
+          <div class="row">
+            <span class="label">Estado</span>
+            @if (acc.is_verified_flag) {
+              <span class="badge ok">Verificado ✔</span>
+            } @else {
+              <span class="badge warn">No verificado</span>
+            }
+          </div>
+        </div>
+
+        <!-- actualizar handle -->
+        <div class="panel">
+          <h2>Actualizar handle</h2>
+
+          <input
+            class="input"
+            type="text"
+            placeholder="Nuevo handle (ej: tourist)"
+            [value]="newHandle()"
+            (input)="newHandle.set(($any($event.target).value))"
+          />
+
+          <button class="btn" (click)="updateHandle()" [disabled]="loading()">
+            Guardar handle
+          </button>
+        </div>
+
+        <!-- flujo de verificación -->
+        @if (!acc.is_verified_flag) {
+          <div class="grid">
+
+            <!-- Paso 1 -->
+            <div class="column">
+              <h2>Paso 1: Iniciar</h2>
+              <p class="hint">
+                Genera un token y te da una instrucción (ejercicio/código) para completar en Codeforces.
+              </p>
+
+              <button class="btn primary" (click)="start()" [disabled]="loading()">
+                Iniciar verificación
+              </button>
+
+              @if (startData(); as s) {
+                <div class="box">
+                  <div class="row">
+                    <span class="label">Verification token</span>
+                    <span class="value mono">{{ s.verification_token }}</span>
+                  </div>
+
+                  <div class="row">
+                    <span class="label">cf_code</span>
+                    <span class="value mono">{{ s.cf_code }}</span>
+                  </div>
+
+                  <p class="hint">
+                    Hacé lo que te pide el sistema en Codeforces usando el <b>cf_code</b>.
+                    Luego pegá el <b>verification_token</b> en el paso 2.
+                  </p>
+                </div>
+              }
+            </div>
+
+            <!-- Paso 2 -->
+            <div class="column">
+              <h2>Paso 2: Finalizar</h2>
+              <p class="hint">
+                Cuando ya cumpliste la condición en Codeforces, pegá el token acá y finalizá.
+              </p>
+
+              <input
+                class="input"
+                type="text"
+                placeholder="Pegá el verification token"
+                [value]="verifyToken()"
+                (input)="verifyToken.set(($any($event.target).value))"
+              />
+
+              <button class="btn" (click)="end()" [disabled]="loading()">
+                Finalizar verificación
+              </button>
+            </div>
+
+          </div>
+        } @else {
+          <div class="panel ok">
+            <h2>¡Listo!</h2>
+            <p class="hint">Tu cuenta ya está verificada. 🎉</p>
+          </div>
+        }
+
+      } @else {
+        <p class="hint">
+          No se encontró tu cuenta de Codeforces (o aún no se ha creado). Revisá que tu backend cree el documento al registrar.
+        </p>
+      }
+    }
+  </section>
+</div>

@@ -30,6 +30,8 @@ export class AuthService {
 
     if (storedToken){
       this._token.set(storedToken);
+      console.log("a: " + this._token());
+      console.log("b: " + this.token());
       this.fetchMe().subscribe();
     }
   }
@@ -60,12 +62,14 @@ export class AuthService {
     );
   }
 
-  fetchMe() { //profile
+  fetchMe() {
+    console.log("Fetching user data...");
   return this._http.get<IUser>(`${environment.apiUrl}/user/me`).pipe(
     tap(user => this._user.set(user)),
     catchError((err: unknown) => {
       if (err instanceof HttpErrorResponse) {
-        if (err.status === 401 || err.status === 403) {
+        if (err.status === 401) {
+          console.log("Unauthorized! Clearing session.");
           this.clearSession();
         }
       }

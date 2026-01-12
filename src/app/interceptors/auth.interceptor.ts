@@ -5,10 +5,17 @@ import { AuthService } from '../services/auth.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  private auth = inject(AuthService);
+
+  constructor() {
+    console.log('[AuthInterceptor] constructed');
+  }
+
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = this.auth.token();
+    const token = localStorage.getItem('token');
+
+    console.log('[Interceptor]', req.url, 'token?', token);
+
 
     if (!token) return next.handle(req);
 

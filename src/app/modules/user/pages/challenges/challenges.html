@@ -6,6 +6,15 @@
     </header>
 
     @if (user()) {
+
+      @if (loading()) {
+        <p class="hint">Cargando challenges...</p>
+      }
+
+      @if (error()) {
+        <p class="error">{{ error() }}</p>
+      }
+
       <div class="grid">
 
         <!-- No completados -->
@@ -18,10 +27,8 @@
                 <li class="challenge-item">
                   <span class="code">{{ c.cf_code }}</span>
 
-                  <button
-                    class="btn"
-                    (click)="markAsCompleted(c._id)">
-                    Marcar como completado
+                  <button class="btn" (click)="markAsCompleted(c._id)">
+                    Verificar / completar
                   </button>
                 </li>
               }
@@ -49,13 +56,38 @@
           }
         </div>
 
+        <!-- Agregar reto -->
+        <div class="column">
+          <h2>Agregar reto</h2>
+
+          <div class="add-box">
+            <label class="label" for="cfcode">Código</label>
+
+            <input
+              id="cfcode"
+              class="input"
+              type="text"
+              placeholder="Ej: 1230A"
+              [value]="newCode()"
+              (input)="newCode.set(($any($event.target).value))"
+              (keydown.enter)="addChallenge()"
+            />
+
+            <button class="btn primary" (click)="addChallenge()">
+              Agregar a pendientes
+            </button>
+
+            @if (localMsg()) {
+              <p class="hint">{{ localMsg() }}</p>
+            }
+          </div>
+        </div>
+
       </div>
     } @else {
       <div class="empty">
         <div class="empty-title">No hay sesión activa</div>
-        <p class="empty-text">
-          Iniciá sesión para ver tus challenges.
-        </p>
+        <p class="empty-text">Iniciá sesión para ver tus challenges.</p>
       </div>
     }
   </section>

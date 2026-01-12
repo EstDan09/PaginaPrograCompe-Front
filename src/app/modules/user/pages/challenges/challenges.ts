@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { AuthService } from '../../../../services/auth.service';
 import { ChallengeService } from '../../../../services/challenge.service';
 
@@ -9,27 +9,53 @@ import { ChallengeService } from '../../../../services/challenge.service';
 })
 export class Challenges {
 
-  private _authService = inject(AuthService);
-  private _challengeService = inject(ChallengeService);
+  private _auth = inject(AuthService);
+  private _challengesSvc = inject(ChallengeService);
 
-  user = this._authService.user;
-  userId = this._authService.userId;
+  user = this._auth.user;
 
-  challenges = computed(() =>
-    this.user()
-      ? this._challengeService.getByStudentId(this.userId())
-      : []
-  );
+  // estado del add
+  newCode = signal('');
+  localMsg = signal<string | null>(null);
 
-  pendingChallenges = computed(() =>
-    this.challenges().filter(c => !c.is_completed_flag)
-  );
+  // expongo signals del service para la UI
+  loading = this._challengesSvc.loading;
+  error = this._challengesSvc.error;
 
-  completedChallenges = computed(() =>
-    this.challenges().filter(c => c.is_completed_flag)
-  );
+  pendingChallenges = this._challengesSvc.pending;
+  completedChallenges = this._challengesSvc.completed;
+
+  constructor() {
+    effect(() => {
+      if (this.user()) {
+        this._challengesSvc.refreshMyChallenges().subscribe();
+      }
+    });
+  }
+
+  addChallenge() {
+    this.localMsg.set(null);
+    const code = this.newCode().trim();
+
+    if (!this.user()) {
+      this.localMsg.set('No hay sesión activa.');
+      return;
+    }
+    if (!code) {
+      this.localMsg.set('Ingresá un código (ej: 1230A).');
+      return;
+    }
+
+    this._challengesSvc.createChallenge(code).subscribe((created) => {
+      if (created) {
+        this.newCode.set('');
+        this.localMsg.set('Reto agregado a pendientes ✅');
+      }
+    });
+  }
 
   markAsCompleted(id: string) {
-    this._challengeService.markAsCompleted(id);
+    // ahora no es local: pega al endpoint verify
+    this._challengesSvc.verifyChallenge(id).subscribe();
   }
 }

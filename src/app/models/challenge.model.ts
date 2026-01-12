@@ -3,5 +3,7 @@ export interface IChallenge {
   student_id: string;
   cf_code: string;
   is_completed_flag: boolean;
-  timestamp: Date;
+  completion_type?: string;
+  createdAt?: string;   
+  updatedAt?: string; 
 }
