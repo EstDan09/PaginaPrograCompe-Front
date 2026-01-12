@@ -3,7 +3,7 @@
     <h1 class="sec-title">{{ "MY_GROUPS.TITLE" | translate }}</h1>
   </div>
   <div class="groups">
-    @for(group of groupList; track $index) {
+    @for(group of groupList(); track $index) {
     <div class="card">
       <h2 class="group-name">{{ group.name }}</h2>
     </div>

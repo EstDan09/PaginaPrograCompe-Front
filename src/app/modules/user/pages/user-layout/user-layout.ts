@@ -22,6 +22,7 @@ export class UserLayout {
 
   myStatsLink = computed(() => ['/user', 'stats', this.userId()]);
 
+  myFollowsLink = computed(() => ['/user', 'following'])
 
   onLogout() {
     this._authService.logout();

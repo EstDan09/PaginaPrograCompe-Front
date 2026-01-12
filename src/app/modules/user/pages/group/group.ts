@@ -14,11 +14,15 @@ export class Group {
   route = inject(ActivatedRoute);
   groupService = inject(GroupService);
 
-  group!: IGroup | undefined;
+  groupList = this.groupService.groupList;
 
   constructor() {
-    const groupId = this.route.snapshot.params['id'];
-    this.group = this.groupService.getGroupById(groupId);
+    this.groupService.getMyGroups().subscribe((groups) => {
+      if (!groups) {
+        console.log("There are no groups");
+      }
+    })
+
   }
 
 
