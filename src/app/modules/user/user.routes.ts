@@ -22,7 +22,7 @@ export const User_Routes: Routes = [
           import('./pages/assignment/assignment').then(m => m.Assignment)
       },
       {
-        path: 'my-groups/:id',
+        path: 'my-groups',
         loadComponent: () =>
           import('./pages/my-groups/my-groups').then(m => m.MyGroups)
       },

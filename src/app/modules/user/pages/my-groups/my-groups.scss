@@ -16,7 +16,13 @@
 
 .sec-title {}
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
 .groups {
+  text-decoration: none;
   width: 100%;
   padding: 24px;
   gap: 20px;

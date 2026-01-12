@@ -5,7 +5,9 @@
   <div class="groups">
     @for(group of groupList(); track $index) {
     <div class="card">
-      <h2 class="group-name">{{ group.name }}</h2>
+      <a [routerLink]="['/user', 'group', group.group_id]">
+        <h2 class="group-name">{{ group.group_id}}</h2>
+      </a>
     </div>
     }
   </div>

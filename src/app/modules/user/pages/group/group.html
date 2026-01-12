@@ -1,9 +1,11 @@
 <div class="page">
   <div class="card">
-    @for(group of groupList(); track $index) {
+    <h2>
+      {{ group()?.name }}
+    </h2>
     <p>
-        hi
+      {{ group()?.description }}
     </p>
-    }
+
   </div>
 </div>
