@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { GroupService } from '../../../../services/group.service';
 import { IGroup } from '../../../../models/group.model';
 import { TranslatePipe } from '@ngx-translate/core';
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -11,15 +12,20 @@ import { TranslatePipe } from '@ngx-translate/core';
   templateUrl: './my-groups.html',
   styleUrl: './my-groups.scss',
 })
+
+
 export class MyGroups {
-  route = inject(ActivatedRoute);
-  groupService = inject(GroupService);
-  groupList!: IGroup[] | undefined;
+  private _groupService = inject(GroupService);
+  groupList = this._groupService.groupList;
 
   constructor() {
-    const userId: string = this.route.snapshot.params['id'];
-    this.groupList = this.groupService.getMyGroups(userId);
+    this._groupService.getMyGroups().subscribe((groups) => {
+      if (!groups) {
+        console.log("There are no groups or failed to load them");
+      }
+    })
   }
+
 }
 
 

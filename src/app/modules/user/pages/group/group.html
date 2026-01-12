@@ -1,9 +1,8 @@
 <div class="page">
-  <h2>{{ "GROUP.TITLE" | translate }}: {{ group?._id }}</h2>
   <div class="card">
-    @for(student of group?.members; track $index) {
+    @for(group of groupList(); track $index) {
     <p>
-      {{ student.username }}
+        hi
     </p>
     }
   </div>
