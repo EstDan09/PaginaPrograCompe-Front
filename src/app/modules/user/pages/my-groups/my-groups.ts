@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { GroupService } from '../../../../services/group.service';
 import { IGroup } from '../../../../models/group.model';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-my-groups',
-  imports: [TranslatePipe],
+  imports: [TranslatePipe, RouterLink],
   templateUrl: './my-groups.html',
   styleUrl: './my-groups.scss',
 })

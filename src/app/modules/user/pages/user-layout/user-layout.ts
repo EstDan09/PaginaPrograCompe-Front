@@ -18,7 +18,7 @@ export class UserLayout {
   username = this._authService.username;
 
 
-  myGroupsLink = computed(() => ['/user', 'my-groups', this.userId()]);
+  myGroupsLink = computed(() => ['/user', 'my-groups']);
 
   myStatsLink = computed(() => ['/user', 'stats', this.userId()]);
 

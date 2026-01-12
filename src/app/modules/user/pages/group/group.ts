@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { IGroup } from '../../../../models/group.model';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { GroupService } from '../../../../services/group.service';
 import { TranslatePipe } from '@ngx-translate/core';
 
@@ -13,13 +12,15 @@ import { TranslatePipe } from '@ngx-translate/core';
 export class Group {
   route = inject(ActivatedRoute);
   groupService = inject(GroupService);
-
-  groupList = this.groupService.groupList;
+  group = this.groupService.group;
 
   constructor() {
-    this.groupService.getMyGroups().subscribe((groups) => {
+    this.groupService.getGroupById(this.route.snapshot.params['id']).subscribe((groups) => {
       if (!groups) {
         console.log("There are no groups");
+      }
+      else {
+        console.log(groups);
       }
     })
 
