@@ -20,7 +20,7 @@ export class UserLayout {
 
   myGroupsLink = computed(() => ['/user', 'my-groups']);
 
-  myStatsLink = computed(() => ['/user', 'stats', this.userId()]);
+  myStatsLink = computed(() => ['/user', 'stats']);
 
   myFollowsLink = computed(() => ['/user', 'following'])
 

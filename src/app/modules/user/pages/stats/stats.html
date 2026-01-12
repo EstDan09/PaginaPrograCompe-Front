@@ -1,0 +1,161 @@
+<div class="page">
+  <section class="card">
+    <header class="header">
+      <div class="title-wrap">
+        <h1>Stats</h1>
+        <p class="subtitle">Resumen de tu rendimiento en Codeforces</p>
+      </div>
+
+      <div class="header-actions">
+        <div class="pill">
+          <span class="pill-label">CF</span>
+          <span class="mono">@{{ handle() }}</span>
+        </div>
+
+        <button class="btn ghost" type="button" (click)="syncNow()">
+          Sync
+        </button>
+      </div>
+    </header>
+
+    <div class="toolbar">
+      <div class="segmented">
+        <button class="seg" type="button" [class.active]="range() === '7d'" (click)="setRange('7d')">7d</button>
+        <button class="seg" type="button" [class.active]="range() === '30d'" (click)="setRange('30d')">30d</button>
+        <button class="seg" type="button" [class.active]="range() === '90d'" (click)="setRange('90d')">90d</button>
+      </div>
+
+      <div class="meta">
+        <span class="meta-item">
+          Último sync:
+          <span class="mono">{{ stats().lastSync }}</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- KPI cards -->
+    <div class="kpis">
+      <div class="kpi">
+        <div class="kpi-label">Rating</div>
+        <div class="kpi-value">
+          <span class="mono">{{ stats().rating }}</span>
+          <span class="badge">{{ stats().level }}</span>
+        </div>
+
+        <div class="progress">
+          <div class="bar" [style.width.%]="ratingProgress()"></div>
+        </div>
+        <div class="kpi-hint">Máximo: <span class="mono">{{ stats().maxRating }}</span></div>
+      </div>
+
+      <div class="kpi">
+        <div class="kpi-label">Resueltos</div>
+        <div class="kpi-value">
+          <span class="mono">{{ stats().solvedTotal }}</span>
+        </div>
+        <div class="kpi-hint">
+          En {{ range() }}: <span class="mono">{{ stats().solvedThisRange }}</span>
+        </div>
+      </div>
+
+      <div class="kpi">
+        <div class="kpi-label">Racha</div>
+        <div class="kpi-value">
+          <span class="mono">{{ stats().streakDays }}</span>
+          <span class="kpi-suffix">días</span>
+        </div>
+        <div class="kpi-hint">Promedio/día: <span class="mono">{{ stats().avgPerDay }}</span></div>
+      </div>
+
+      <div class="kpi">
+        <div class="kpi-label">Accuracy</div>
+        <div class="kpi-value">
+          <span class="mono">{{ (stats().accuracy * 100) | number:'1.0-0' }}%</span>
+        </div>
+        <div class="kpi-hint">Intentos vs. aceptados (mock)</div>
+      </div>
+    </div>
+
+    <!-- Main grid -->
+    <div class="grid">
+      <!-- Left: heatmap + activity -->
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Actividad</h2>
+          <span class="muted">Últimos 28 días</span>
+        </div>
+
+        <div class="heatmap">
+          @for (cell of heat(); track cell.day) {
+            <div
+              class="cell"
+              [attr.data-level]="cell.count"
+              [title]="cell.day + ': ' + cell.count + ' solves'">
+            </div>
+          }
+        </div>
+
+        <div class="panel-subhead">
+          <h3>Feed</h3>
+          <span class="muted">Cambios recientes</span>
+        </div>
+
+        <ul class="activity">
+          @for (a of activity(); track a.date + a.label) {
+            <li class="activity-item">
+              <div class="activity-left">
+                <div class="date mono">{{ a.date }}</div>
+                <div class="label">{{ a.label }}</div>
+              </div>
+
+              <div class="activity-right">
+                <span class="delta" [class.good]="a.delta > 0">
+                  @if (a.type === 'rating') { +{{ a.delta }} }
+                  @else { +{{ a.delta }} }
+                </span>
+              </div>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <!-- Right: tags breakdown -->
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Tags</h2>
+          <span class="muted">Top 5</span>
+        </div>
+
+        <div class="bars">
+          @for (t of barData(); track t.tag) {
+            <div class="bar-row">
+              <div class="bar-label">
+                <span class="tag">{{ t.tag }}</span>
+                <span class="mono">{{ t.solved }}</span>
+              </div>
+              <div class="bar-track">
+                <div class="bar-fill" [style.width.%]="t.pct"></div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="panel-subhead">
+          <h3>Detalle</h3>
+          <span class="muted">Distribución completa</span>
+        </div>
+
+        <ul class="tag-list">
+          @for (t of tags(); track t.tag) {
+            <li class="tag-item">
+              <span class="tag">{{ t.tag }}</span>
+              <span class="mono">{{ t.solved }}</span>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>

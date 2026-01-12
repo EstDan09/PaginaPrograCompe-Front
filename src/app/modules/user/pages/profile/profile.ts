@@ -1,5 +1,6 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, effect, inject } from '@angular/core';
 import { AuthService } from '../../../../services/auth.service';
+import { GroupService } from '../../../../services/group.service';
 
 @Component({
   selector: 'app-profile',
@@ -8,6 +9,7 @@ import { AuthService } from '../../../../services/auth.service';
 })
 export class Profile {
   private _authService = inject(AuthService);
+  private _groupService = inject(GroupService);
 
   user = this._authService.user;
 
@@ -15,7 +17,15 @@ export class Profile {
   email = this._authService.email;
   role = this._authService.role;
   userId = this._authService.userId;
-  groups = this._authService.groups;
 
-  groupsCount = computed(() => this.groups().length);
+  groupList = this._groupService.groupList;
+  groupsCount = computed(() => this.groupList()?.length ?? 0);
+
+  constructor() {
+    effect(() => {
+      if (this.user()) {
+        this._groupService.getMyGroups().subscribe();
+      }
+    });
+  }
 }

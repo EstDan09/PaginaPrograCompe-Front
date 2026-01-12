@@ -44,6 +44,11 @@ export const User_Routes: Routes = [
           import('./pages/challenges/challenges').then(m => m.Challenges)
       },
       {
+        path: 'stats',
+        loadComponent: () =>
+          import('./pages/stats/stats').then(m => m.Stats)
+      },
+      {
         path: '**',
         redirectTo: ''
       },

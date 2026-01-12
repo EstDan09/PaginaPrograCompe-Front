@@ -37,6 +37,7 @@ export class Login {
 
   this._authService.login(username!, password!).subscribe((user) => {
     if (user) {
+      console.log('Login exitoso:', user);
       this._router.navigate(['/user']);
     } else {
       console.log('Credenciales inválidas');

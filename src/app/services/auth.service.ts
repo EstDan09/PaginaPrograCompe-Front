@@ -23,22 +23,30 @@ export class AuthService {
   username = computed(() => this._user()?.username ?? 'Guest');
   email = computed(() => this._user()?.email ?? '—');
   role = computed(() => this._user()?.role ?? '—');
-  groups = computed(() => this._user()?.child_groups ?? []);
 
   constructor() {
     const storedToken = localStorage.getItem('token');
 
-    if (storedToken){
+    if (storedToken) {
       this._token.set(storedToken);
-      console.log("a: " + this._token());
-      console.log("b: " + this.token());
       this.fetchMe().subscribe();
     }
   }
 
   login(username: string, password: string) {
     return this._http.post<AuthResponse>(`${environment.apiUrl}/auth/login`, { username, password }).pipe(
-      tap(({ token}) => this.setToken(token)),
+      tap(({ token }) => this.setToken(token)),
+      switchMap(() => this.fetchMe()),
+      catchError(() => {
+        this.clearSession();
+        return of(null);
+      })
+    );
+  }
+
+  register(data: { username: string; password: string; role: 'student' | 'coach'; email?: string }) {
+    return this._http.post<AuthResponse>(`${environment.apiUrl}/auth/register`, data).pipe(
+      tap(({ token }) => this.setToken(token)),
       switchMap(() => this.fetchMe()),
       catchError(() => {
         this.clearSession();
@@ -51,32 +59,17 @@ export class AuthService {
     this.clearSession();
   }
 
-  register(data: { username: string; password: string; role: 'student' | 'coach'; email?: string }) {
-    return this._http.post<AuthResponse>(`${environment.apiUrl}/auth/register`, data).pipe(
-      tap(({ token }) => this.setToken(token)),
-      switchMap(() => this.fetchMe()),
-      catchError((err) => {
-        this.clearSession();
+  fetchMe() {
+    return this._http.get<IUser>(`${environment.apiUrl}/user/me`).pipe(
+      tap(user => this._user.set(user)),
+      catchError((err: unknown) => {
+        if (err instanceof HttpErrorResponse && err.status === 401) {
+          this.clearSession();
+        }
         return of(null);
       })
     );
   }
-
-  fetchMe() {
-    console.log("Fetching user data...");
-  return this._http.get<IUser>(`${environment.apiUrl}/user/me`).pipe(
-    tap(user => this._user.set(user)),
-    catchError((err: unknown) => {
-      if (err instanceof HttpErrorResponse) {
-        if (err.status === 401) {
-          console.log("Unauthorized! Clearing session.");
-          this.clearSession();
-        }
-      }
-      return of(null);
-    })
-  );
-}
 
   private clearSession() {
     this._token.set(null);
@@ -85,8 +78,8 @@ export class AuthService {
   }
 
   private setToken(token: string) {
-    this._token.set(token);
-    localStorage.setItem('token', token);
+    const clean = token.trim();
+    this._token.set(clean);
+    localStorage.setItem('token', clean);
   }
-
 }

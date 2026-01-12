@@ -38,15 +38,18 @@
           <h2>Mis grupos</h2>
 
           <ul class="group-list">
-            @for (g of groups(); track g._id) {
+            @for (g of groupList()!; track g._id) {
               <li class="group-item">
                 <span class="dot"></span>
-                <span class="group-name">{{ g.name }}</span>
+                <span class="group-name">{{ g.group_id }}</span>
               </li>
             }
           </ul>
         </div>
+      } @else {
+        <p class="empty-text">No estás en ningún grupo todavía</p>
       }
+
     } @else {
       <div class="empty">
         <div class="empty-title">No hay sesión activa</div>
