@@ -14,7 +14,7 @@ export class Following {
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
   private _followingService: FollowingService = inject(FollowingService);
   private _translateService = inject(TranslateService);
-  following: IFollow[] | undefined;
+  following = this._followingService.followingList;
   test: string[] = ["hola", "fuck", "you"];
 
   setLang(lang: "es" | "en") {
@@ -24,15 +24,9 @@ export class Following {
 
   constructor() {
     this._followingService.getFollowing().subscribe((following) => {
-      if (following) {
-        this.following = following;
-        console.log(this.following);
-        this.changeDetectorRef.markForCheck();
-      }
-      else {
+      if (!following) {
         console.log("FAILED TO LOAD FRIENDS");
       }
-
     });
   }
 

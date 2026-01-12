@@ -1,6 +1,9 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { IGroup } from '../models/group.model';
 import { IUser } from '../models/user.model';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { catchError, of, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -8,63 +11,29 @@ import { IUser } from '../models/user.model';
 
 //All this data will go once the service can serve from API
 export class GroupService {
-  students: IUser[] = [
-    {
-      _id: "0",
-      username: "moraga",
-      email: "test@mail.com",
-      role: "student",
-      child_groups: []
 
-    },
-    {
-      _id: "0",
-      username: "moraga",
-      email: "test@mail.com",
-      role: "student",
-      child_groups: []
+  _URL = `${environment.apiUrl}/group/get`;
+  _http: HttpClient = inject(HttpClient);
 
-    },
-    {
-      _id: "0",
-      username: "moraga",
-      email: "test@mail.com",
-      role: "student",
-      child_groups: []
+  private _groupList = signal<IGroup[] | null>(null);
+  readonly groupList = this._groupList.asReadonly();
 
-    },
-  ]
 
-  groups: IGroup[] = [
-    {
-      _id: "0",
-      name: "Analisis de datos",
-      creator_id: "0",
-      members: this.students,
-      assignments: []
-    },
-    {
-      _id: "1",
-      name: "Todo es mental",
-      creator_id: "0",
-      members: this.students,
-      assignments: []
-    },
-    {
-      _id: "2",
-      name: "tec-alajuela",
-      creator_id: "0",
-      members: this.students,
-      assignments: []
-    }
-  ]
 
   getGroupById(id: string) {
-    return this.groups.find((g) => g._id === id);
+
+
   }
 
-  getMyGroups(id: string) {
-    return this.groups.filter((g) => g._id === id)
+  getMyGroups() {
+    return this._http.get<IGroup[]>(this._URL).pipe(
+      tap(groups => this._groupList.set(groups)),
+      catchError(() => {
+        return of(null);
+      })
+    );
+
+
   }
 
 }

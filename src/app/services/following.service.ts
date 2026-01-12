@@ -12,6 +12,7 @@ export class FollowingService {
   private _http = inject(HttpClient)
 
   private _followingList = signal<IFollow[] | null>(null);
+  readonly followingList = this._followingList.asReadonly();
 
 
   getFollowing() {

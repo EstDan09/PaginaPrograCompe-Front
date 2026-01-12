@@ -1,6 +1,6 @@
 <div class="page">
   <h1>{{ "FOLLOWING.FOLLOWING_TITLE" | translate }}</h1>
-  @for (follow of following; track $index) {
+  @for (follow of following(); track $index) {
     <div class="card">
       <a class="foll" href="www.google.com">
         {{ follow?.student_2_id }}
