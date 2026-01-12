@@ -1,0 +1,9 @@
+export interface IChallenge {
+  _id: string;
+  student_id: string;
+  cf_code: string;
+  is_completed_flag: boolean;
+  completion_type?: string;
+  createdAt?: string;   
+  updatedAt?: string; 
+}

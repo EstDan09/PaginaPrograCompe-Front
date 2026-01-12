@@ -1,0 +1,55 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+
+.column {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.status, .panel, .box {
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  border-radius: 16px;
+  padding: 1rem;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.25rem 0;
+}
+
+.label { opacity: 0.7; }
+.value { font-weight: 600; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+
+.input {
+  width: 100%;
+  padding: 0.75rem 0.85rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  color: inherit;
+  outline: none;
+}
+
+.badge {
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+.badge.ok { opacity: 0.95; }
+.badge.warn { opacity: 0.95; }
+
+.msg.error { margin: 0.75rem 0; opacity: 0.9; }
+.hint { opacity: 0.75; margin: 0; }
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: 1fr; }
+}

@@ -56,7 +56,7 @@ export class CreateUser {
     email: email!,
   }).subscribe((user) => {
     if (user) {
-      this._router.navigate(['/user']);
+      this._router.navigate(['/auth/verification']);
     } else {
       console.log('Register failed');
     }

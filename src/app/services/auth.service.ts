@@ -1,6 +1,6 @@
 import { Injectable, signal, computed, inject } from "@angular/core";
 import { IUser } from "../models/user.model";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { tap, catchError, of, switchMap } from 'rxjs';
 import { environment } from '../../environments/environment';
 
@@ -30,6 +30,8 @@ export class AuthService {
 
     if (storedToken){
       this._token.set(storedToken);
+      console.log("a: " + this._token());
+      console.log("b: " + this.token());
       this.fetchMe().subscribe();
     }
   }
@@ -61,14 +63,20 @@ export class AuthService {
   }
 
   fetchMe() {
-    return this._http.get<IUser>(`${environment.apiUrl}/user/me`).pipe(
-      tap(user => this._user.set(user)),
-      catchError(() => {
-        this.clearSession();
-        return of(null);
-      })
-    );
-  }
+    console.log("Fetching user data...");
+  return this._http.get<IUser>(`${environment.apiUrl}/user/me`).pipe(
+    tap(user => this._user.set(user)),
+    catchError((err: unknown) => {
+      if (err instanceof HttpErrorResponse) {
+        if (err.status === 401) {
+          console.log("Unauthorized! Clearing session.");
+          this.clearSession();
+        }
+      }
+      return of(null);
+    })
+  );
+}
 
   private clearSession() {
     this._token.set(null);
