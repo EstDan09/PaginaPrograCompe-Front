@@ -1,39 +1,47 @@
 <nav class="topbar">
-  <div class="tabs">
-    <a routerLink="/user" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-      Home
-    </a>
+  <div class="topbar__inner">
+    <div class="brand">
+      <span class="brand__name">CFTrainer</span>
+    </div>
 
-    <a [routerLink]="myStatsLink()" routerLinkActive="active">
-      Estadísticas
-    </a>
+    <div class="tabs">
+      <a routerLink="/user" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        home
+      </a>
 
-    <a [routerLink]="myGroupsLink()" routerLinkActive="active">
-      Equipos
-    </a>
+      <a [routerLink]="myStatsLink()" routerLinkActive="active">
+        statistics
+      </a>
 
-    <a [routerLink]="myFollowsLink()" routerLinkActive="active">
-      Amigos
-    </a>
+      <a [routerLink]="myGroupsLink()" routerLinkActive="active">
+        teams
+      </a>
 
-    <a routerLink="/user/profile" routerLinkActive="active">
-      Perfil
-    </a>
-    <a routerLink="/user/challenges" routerLinkActive="active">
-      Retos
-    </a>
-    <a routerLink="/auth/verification" routerLinkActive="active">
-      Verificación
-    </a>
-  </div>
+      <a [routerLink]="myFollowsLink()" routerLinkActive="active">
+        friends
+      </a>
 
-  <div class="right">
-    @if (user()) {
-      <span class="user">👤 {{ user()!.username }}</span>
-      <button class="btn-ghost" type="button" (click)="onLogout()">Salir</button>
-    } @else {
-      <a class="btn-ghost" routerLink="/auth/login">Inicie sesión</a>
-    }
+      <a routerLink="/user/profile" routerLinkActive="active">
+        profile
+      </a>
+
+      <a routerLink="/user/challenges" routerLinkActive="active">
+        challenges
+      </a>
+
+      <a routerLink="/auth/verification" routerLinkActive="active">
+        verification
+      </a>
+    </div>
+
+    <div class="right">
+      @if (user()) {
+        <span class="user">👤 {{ user()!.username }}</span>
+        <button class="btn-ghost" type="button" (click)="onLogout()">Salir</button>
+      } @else {
+        <a class="btn-ghost" routerLink="/auth/login">Inicie sesión</a>
+      }
+    </div>
   </div>
 </nav>
 
