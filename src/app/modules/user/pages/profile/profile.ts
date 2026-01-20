@@ -4,6 +4,7 @@ import { GroupService } from '../../../../services/group.service';
 
 @Component({
   selector: 'app-profile',
+  imports: [],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
@@ -20,6 +21,10 @@ export class Profile {
 
   groupList = this._groupService.groupList;
   groupsCount = computed(() => this.groupList()?.length ?? 0);
+
+  rating = computed(() => 3978);
+  following = computed(() => 23);
+  followers = computed(() => 1980);
 
   constructor() {
     effect(() => {

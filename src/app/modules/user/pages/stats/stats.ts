@@ -1,104 +1,139 @@
-import { DecimalPipe } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
 
 type TagStat = { tag: string; solved: number };
-type ActivityItem = { date: string; label: string; delta: number; type: 'solved' | 'rating' };
-type HeatCell = { day: string; count: number };
+type SolveBin = { label: string; solved: number }; // ej: "800", "900", ...
 
 @Component({
   selector: 'app-stats',
-  imports: [DecimalPipe],
+  imports: [],
   templateUrl: './stats.html',
   styleUrl: './stats.scss',
 })
 export class Stats {
-  private _handle = signal('student_cf'); 
-  handle = this._handle.asReadonly();
+  // KPIs mock (como la imagen)
+  rating = signal(1243);
+  solved = signal(1243);
+  streakDays = signal(6);
 
-  private _range = signal<'7d' | '30d' | '90d'>('30d');
-  range = this._range.asReadonly();
-
-  private _stats = signal({
-    rating: 1284,
-    maxRating: 1342,
-    solvedTotal: 217,
-    solvedThisRange: 32,
-    streakDays: 6,
-    avgPerDay: 1.1,
-    accuracy: 0.62, // 62%
-    lastSync: '2026-01-12 14:10',
-    level: 'Pupil', // mock
-  });
-
-  stats = this._stats.asReadonly();
-
-  private _tags = signal<TagStat[]>([
-    { tag: 'implementation', solved: 42 },
-    { tag: 'greedy', solved: 31 },
-    { tag: 'math', solved: 29 },
-    { tag: 'dp', solved: 18 },
-    { tag: 'graphs', solved: 12 },
-    { tag: 'strings', solved: 16 },
-    { tag: 'binary search', solved: 14 },
+  // --- Rating history (mock) ---
+  // puntos en el tiempo (sube suave al final)
+  private _ratingSeries = signal<number[]>([
+    820, 910, 860, 880, 940, 980, 900, 870, 860, 930, 1010, 1040, 1080, 1120, 1100,
   ]);
 
-  tags = this._tags.asReadonly();
-
-  private _activity = signal<ActivityItem[]>([
-    { date: '2026-01-12', label: '3 problemas resueltos', delta: 3, type: 'solved' },
-    { date: '2026-01-11', label: 'Subiste de rating', delta: 18, type: 'rating' },
-    { date: '2026-01-10', label: '1 problema resuelto', delta: 1, type: 'solved' },
-    { date: '2026-01-09', label: '2 problemas resueltos', delta: 2, type: 'solved' },
+  // --- Solves by rating (mock) ---
+  private _solvesByRating = signal<SolveBin[]>([
+    { label: '800', solved: 300 },
+    { label: '900', solved: 130 },
+    { label: '1000', solved: 160 },
+    { label: '1100', solved: 60 },
+    { label: '1200', solved: 100 },
+    { label: '1300', solved: 125 },
+    { label: '1400', solved: 70 },
+    { label: '1500', solved: 50 },
+    { label: '1600', solved: 30 },
+    { label: '1700', solved: 12 },
+    { label: '1800', solved: 7 },
+    { label: '1900', solved: 3 },
   ]);
 
-  activity = this._activity.asReadonly();
+  // --- Tags (mock) ---
+  tags = signal<TagStat[]>([
+    { tag: 'implementation', solved: 453 },
+    { tag: 'binary search', solved: 420 },
+    { tag: 'greedy', solved: 524 },
+    { tag: 'math', solved: 32 },
+    { tag: 'fft', solved: 69 },
+    { tag: 'graphs', solved: 532 },
+  ]);
 
-  private _heat = signal<HeatCell[]>(
-    Array.from({ length: 28 }).map((_, i) => ({
-      day: `D-${27 - i}`,
-      count: [0, 0, 1, 2, 3, 4][(i * 7) % 6], // patrón simple
-    }))
-  );
+  // ====== Rating Graph (SVG) ======
+  // área “dibujable” dentro del SVG
+  ratingW = 640;
+  ratingH = 220;
+  padding = { l: 34, r: 14, t: 14, b: 26 };
 
-  heat = this._heat.asReadonly();
+  ratingMin = computed(() => Math.min(...this._ratingSeries()));
+  ratingMax = computed(() => Math.max(...this._ratingSeries()));
 
-  ratingProgress = computed(() => {
-    const { rating, maxRating } = this.stats();
-    if (!maxRating) return 0;
-    return Math.min(100, Math.round((rating / maxRating) * 100));
+  ratingPoints = computed(() => {
+    const data = this._ratingSeries();
+    const min = this.ratingMin();
+    const max = this.ratingMax();
+    const w = this.ratingW;
+    const h = this.ratingH;
+    const { l, r, t, b } = this.padding;
+
+    const innerW = w - l - r;
+    const innerH = h - t - b;
+
+    const denom = Math.max(1, max - min);
+
+    return data.map((v, i) => {
+      const x = l + (innerW * i) / Math.max(1, data.length - 1);
+      const y = t + innerH * (1 - (v - min) / denom);
+      return { x, y, v };
+    });
   });
 
-  topTags = computed(() =>
-    [...this.tags()].sort((a, b) => b.solved - a.solved).slice(0, 5)
+  ratingPolyline = computed(() =>
+    this.ratingPoints()
+      .map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`)
+      .join(' ')
   );
 
-  totalTagSolved = computed(() =>
-    this.tags().reduce((acc, t) => acc + t.solved, 0)
-  );
+  // ====== Solves by rating (SVG) ======
+  barsW = 640;
+  barsH = 300;
+  barsPadding = { l: 42, r: 16, t: 16, b: 34 };
 
-  barData = computed(() => {
-    const max = Math.max(1, ...this.topTags().map(t => t.solved));
-    return this.topTags().map(t => ({
-      ...t,
-      pct: Math.round((t.solved / max) * 100),
-    }));
+  solvesMax = computed(() => Math.max(...this._solvesByRating().map(b => b.solved)));
+
+  bars = computed(() => {
+    const data = this._solvesByRating();
+    const max = this.solvesMax();
+    const w = this.barsW;
+    const h = this.barsH;
+    const { l, r, t, b } = this.barsPadding;
+
+    const innerW = w - l - r;
+    const innerH = h - t - b;
+
+    const barW = innerW / data.length;
+    const gap = Math.min(8, barW * 0.18);
+    const realW = barW - gap;
+
+    return data.map((d, i) => {
+      const x = l + i * barW + gap / 2;
+      const hh = (d.solved / Math.max(1, max)) * innerH;
+      const y = t + (innerH - hh);
+
+      return {
+        ...d,
+        x,
+        y,
+        w: realW,
+        h: hh,
+        // color “por zona” (se parece al screenshot: grises, verdes, morados, rosado)
+        fill: this.binColor(Number(d.label)),
+      };
+    });
   });
 
-  setRange(r: '7d' | '30d' | '90d') {
-    this._range.set(r);
+  yTicks = computed(() => {
+    const max = this.solvesMax();
+    // ticks parecidos al screenshot (0..350)
+    const top = Math.ceil(max / 50) * 50;
+    const ticks = [];
+    for (let v = 50; v <= top; v += 50) ticks.push(v);
+    return ticks;
+  });
 
-    const base = this.stats();
-    if (r === '7d') {
-      this._stats.set({ ...base, solvedThisRange: 9, avgPerDay: 1.3 });
-    } else if (r === '30d') {
-      this._stats.set({ ...base, solvedThisRange: 32, avgPerDay: 1.1 });
-    } else {
-      this._stats.set({ ...base, solvedThisRange: 71, avgPerDay: 0.9 });
-    }
-  }
-
-  syncNow() {
-    const base = this.stats();
-    this._stats.set({ ...base, lastSync: '2026-01-12 14:22' });
+  private binColor(r: number) {
+    // Ajustalo si querés otro look
+    if (r <= 1100) return 'rgba(140,140,140,0.85)';   // gris
+    if (r <= 1500) return 'rgba(0,220,140,0.85)';     // verde
+    if (r <= 1800) return 'rgba(140,120,240,0.75)';   // morado
+    return 'rgba(255,90,170,0.75)';                   // rosado
   }
 }
