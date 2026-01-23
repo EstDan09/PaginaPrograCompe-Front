@@ -15,7 +15,6 @@ export class Following {
   private _followingService: FollowingService = inject(FollowingService);
   private _translateService = inject(TranslateService);
   following = this._followingService.followingList;
-  test: string[] = ["hola", "fuck", "you"];
 
   setLang(lang: "es" | "en") {
     this._translateService.use(lang);
