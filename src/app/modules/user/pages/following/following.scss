@@ -1,20 +1,101 @@
-.page {
-  border-radius: 5px;
-  background-color: ghostwhite;
-  padding: 10px;
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
+.page {
+  min-height: 100vh;
+  padding: 28px 18px;
+  background: #f6f7fb;
+}
+
+.title {
+  margin: 0 0 18px 0;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
 
 .card {
-  padding: 3px;
-  border-color: black;
-  border-width: 5px;
-  background-color: white;
-  border-radius: 5px;
-  margin-bottom: 5px;
+  width: min(560px, 100%);
+  margin: 0 auto;
+  background: #f6f7fb;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-radius: 6px;
+  overflow: hidden;
 }
 
-.foll {
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  align-items: center;
+  gap: 14px;
+
+  padding: 14px 18px;
+  border-top: 1px solid rgba(0, 0, 0, 0.18);
+
+  &:first-child {
+    border-top: none;
+  }
+}
+
+.avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: #5b9db6; /* azulito como el mock */
+  display: grid;
+  place-items: center;
+
+  font-weight: 800;
+  font-size: 20px;
+  color: rgba(17, 24, 39, 0.9);
+  text-transform: uppercase;
+}
+
+.name {
+  justify-self: end;
+  font-size: 28px;
+  font-weight: 800;
+  color: #0b1220;
   text-decoration: none;
-  color: inherit;
+  letter-spacing: -0.01em;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.empty {
+  padding: 18px;
+  text-align: center;
+}
+
+.empty-text {
+  margin: 0;
+  opacity: 0.75;
+}
+
+/* Mobile */
+@media (max-width: 520px) {
+  .name {
+    font-size: 22px;
+  }
+
+  .row {
+    padding: 12px 14px;
+  }
+
+  .avatar {
+    width: 50px;
+    height: 50px;
+    font-size: 18px;
+  }
 }

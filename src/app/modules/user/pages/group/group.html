@@ -1,11 +1,46 @@
-<div class="page">
-  <div class="card">
-    <h2>
-      {{ group()?.name }}
-    </h2>
-    <p>
-      {{ group()?.description }}
-    </p>
+<!-- group.html -->
+<div class="page" *ngIf="groupDetails() as g">
+  <header class="head">
+    <div>
+      <h1 class="title">{{ g.group.name }}</h1>
+      <p class="owner">Owner: {{ g.group.owner.username }}</p>
+    </div>
 
-  </div>
+    <button class="btn" type="button">
+      View members
+    </button>
+  </header>
+
+  <p class="desc" *ngIf="g.group.description">
+    {{ g.group.description }}
+  </p>
+
+  <section class="list">
+    <div
+      class="row"
+      *ngFor="let a of g.assignments; trackBy: trackAssignment"
+      [routerLink]="['/user/assignment', a._id]"
+      role="button"
+      tabindex="0"
+    >
+      <div class="row-title">{{ a.title }}</div>
+
+      <div class="meta">
+       <!--  <div class="kv">
+          <span class="k">Completed:</span>
+          <span class="v">{{ a.completed ? 'Yes' : 'No' }}</span>
+        </div> -->
+
+        <div class="kv">
+          <span class="k">Problems:</span>
+          <span class="v">{{ a.exerciseCount }}</span>
+        </div>
+
+        <div class="kv" *ngIf="a.due_date">
+          <span class="k">Due Date:</span>
+          <span class="v">{{ a.due_date | date:"MM/dd/yyyy 'at' h:mma" }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>

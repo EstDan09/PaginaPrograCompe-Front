@@ -9,17 +9,17 @@ export class AssignmentService {
     {
       title: "placeholder",
       points: 5,
-      problem_id: "1054D",
+      problem_id: "10542",
     },
     {
       title: "placeholder",
       points: 5,
-      problem_id: "1054D",
+      problem_id: "1054e",
     },
     {
       title: "placeholder",
       points: 5,
-      problem_id: "1054D",
+      problem_id: "1054g",
     },
   ]
   assignments: IAssignment[] = [

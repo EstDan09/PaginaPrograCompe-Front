@@ -7,7 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-assignment',
-  imports: [TranslatePipe, DatePipe],
+  imports: [TranslatePipe],
   templateUrl: './assignment.html',
   styleUrl: './assignment.scss',
 })
@@ -21,4 +21,8 @@ export class Assignment {
     const assignmentId: string = this.route.snapshot.params['id'];
     this.assignment = this.assignmentService.getAssignmentById(assignmentId);
   }
+
+  verify() {
+  console.log('Verify clicked for assignment:', this.assignment?._id);
+}
 }

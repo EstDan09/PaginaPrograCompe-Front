@@ -49,6 +49,11 @@ export const User_Routes: Routes = [
           import('./pages/stats/stats').then(m => m.Stats)
       },
       {
+        path: 'verification',
+        loadComponent: () =>
+          import('./pages/verification/verification').then(m => m.Verification)
+      },
+      {
         path: '**',
         redirectTo: ''
       },

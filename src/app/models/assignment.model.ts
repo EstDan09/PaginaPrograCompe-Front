@@ -10,3 +10,11 @@ export interface IAssignment {
   dueDate: Date;
   exercises: IExercise[];
 }
+
+export interface IAssignmentSummary {
+  _id: string;
+  title: string;
+  description?: string | null;
+  due_date?: string | null;    
+  exerciseCount: number;
+}
