@@ -1,55 +1,49 @@
 <div class="page">
-  <section class="card">
-    <header class="header">
-      <h1>Perfil</h1>
-      <p class="subtitle">Información de tu cuenta</p>
-    </header>
+  <section class="profile-card">
+    @if (user()) {
+      <div class="left">
+        <h1 class="name">{{ username() }}</h1>
 
-    @if (user(); as u) {
-      <div class="rows">
-        <div class="row">
-          <span class="label">Nombre de usuario</span>
-          <span class="value">{{ username() }}</span>
+        <div class="kv">
+          <div class="item">
+            <span class="k">Rating:</span>
+            <span class="v">{{ rating() }}</span>
+          </div>
+
+          <div class="item">
+            <span class="k">Following:</span>
+            <span class="v">{{ following() }}</span>
+          </div>
+
+          <div class="item">
+            <span class="k">Followers:</span>
+            <span class="v">{{ followers() }}</span>
+          </div>
+
+          <div class="item">
+            <span class="k">E-mail:</span>
+            <span class="v">{{ email() }}</span>
+          </div>
+
+          <div class="item">
+            <span class="k">Roll:</span>
+            <span class="v">{{ role() === 'student' ? 'Student' : role() }}</span>
+          </div>
+
+          <div class="item">
+            <span class="k">Groups:</span>
+            <span class="v">{{ groupsCount() }}</span>
+          </div>
         </div>
 
-        <div class="row">
-          <span class="label">Email</span>
-          <span class="value">{{ email() }}</span>
-        </div>
-
-        <div class="row">
-          <span class="label">ID</span>
-          <span class="value mono">{{ userId() }}</span>
-        </div>
-
-        <div class="row">
-          <span class="label">Rol</span>
-          <span class="value">{{ role() }}</span>
-        </div>
-
-        <div class="row">
-          <span class="label">Grupos</span>
-          <span class="value">{{ groupsCount() }}</span>
+        <div class="actions">
+          <a class="btn" routerLink="/user/stats">View stats</a>
         </div>
       </div>
 
-      @if (groupsCount() > 0) {
-        <div class="groups">
-          <h2>Mis grupos</h2>
-
-          <ul class="group-list">
-            @for (g of groupList()!; track g._id) {
-              <li class="group-item">
-                <span class="dot"></span>
-                <span class="group-name">{{ g.group_id }}</span>
-              </li>
-            }
-          </ul>
-        </div>
-      } @else {
-        <p class="empty-text">No estás en ningún grupo todavía</p>
-      }
-
+      <div class="right">
+        <img class="avatar" src="assets/donut.png" alt="Profile image" />
+      </div>
     } @else {
       <div class="empty">
         <div class="empty-title">No hay sesión activa</div>

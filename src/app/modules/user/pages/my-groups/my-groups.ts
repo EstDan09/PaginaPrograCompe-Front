@@ -1,31 +1,22 @@
-import { Component, inject } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { GroupService } from '../../../../services/group.service';
-import { IGroup } from '../../../../models/group.model';
+import { Component, computed, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { HttpClient } from '@angular/common/http';
-
+import { GroupService } from '../../../../services/group.service';
 
 @Component({
   selector: 'app-my-groups',
-  imports: [TranslatePipe, RouterLink],
+  imports: [RouterLink],
   templateUrl: './my-groups.html',
   styleUrl: './my-groups.scss',
 })
-
-
 export class MyGroups {
   private _groupService = inject(GroupService);
-  groupList = this._groupService.groupList;
+
+  groups = this._groupService.myGroupsSummary;
+
+  isEmpty = computed(() => (this.groups()?.length ?? 0) === 0);
 
   constructor() {
-    this._groupService.getMyGroups().subscribe((groups) => {
-      if (!groups) {
-        console.log("There are no groups or failed to load them");
-      }
-    })
+    this._groupService.getMyGroupsSummaryDemo().subscribe();
   }
-
 }
-
-

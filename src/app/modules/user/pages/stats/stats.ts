@@ -1,104 +1,135 @@
-import { DecimalPipe } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, effect, inject } from '@angular/core';
+import { StatsService } from '../../../../services/stats.service';
 
 type TagStat = { tag: string; solved: number };
-type ActivityItem = { date: string; label: string; delta: number; type: 'solved' | 'rating' };
-type HeatCell = { day: string; count: number };
+type SolveBin = { label: string; solved: number }; // ej: "800", "900", ...
 
 @Component({
   selector: 'app-stats',
-  imports: [DecimalPipe],
+  imports: [],
   templateUrl: './stats.html',
   styleUrl: './stats.scss',
 })
 export class Stats {
-  private _handle = signal('student_cf'); 
-  handle = this._handle.asReadonly();
+  private _statsService = inject(StatsService);
 
-  private _range = signal<'7d' | '30d' | '90d'>('30d');
-  range = this._range.asReadonly();
+  // Fuente única de verdad (cuando exista endpoint real, solo cambiás getMeDemo -> getMe)
+  data = this._statsService.stats;
 
-  private _stats = signal({
-    rating: 1284,
-    maxRating: 1342,
-    solvedTotal: 217,
-    solvedThisRange: 32,
-    streakDays: 6,
-    avgPerDay: 1.1,
-    accuracy: 0.62, // 62%
-    lastSync: '2026-01-12 14:10',
-    level: 'Pupil', // mock
-  });
+  // KPIs (fallback 0 por si aún no cargó)
+  rating = computed(() => this.data()?.kpis.rating ?? 0);
+  solved = computed(() => this.data()?.kpis.solvedTotal ?? 0);
+  streakDays = computed(() => this.data()?.kpis.streakDays ?? 0);
 
-  stats = this._stats.asReadonly();
-
-  private _tags = signal<TagStat[]>([
-    { tag: 'implementation', solved: 42 },
-    { tag: 'greedy', solved: 31 },
-    { tag: 'math', solved: 29 },
-    { tag: 'dp', solved: 18 },
-    { tag: 'graphs', solved: 12 },
-    { tag: 'strings', solved: 16 },
-    { tag: 'binary search', solved: 14 },
-  ]);
-
-  tags = this._tags.asReadonly();
-
-  private _activity = signal<ActivityItem[]>([
-    { date: '2026-01-12', label: '3 problemas resueltos', delta: 3, type: 'solved' },
-    { date: '2026-01-11', label: 'Subiste de rating', delta: 18, type: 'rating' },
-    { date: '2026-01-10', label: '1 problema resuelto', delta: 1, type: 'solved' },
-    { date: '2026-01-09', label: '2 problemas resueltos', delta: 2, type: 'solved' },
-  ]);
-
-  activity = this._activity.asReadonly();
-
-  private _heat = signal<HeatCell[]>(
-    Array.from({ length: 28 }).map((_, i) => ({
-      day: `D-${27 - i}`,
-      count: [0, 0, 1, 2, 3, 4][(i * 7) % 6], // patrón simple
-    }))
+  // Series para tus gráficos (manteniendo tu lógica actual)
+  private _ratingSeries = computed<number[]>(() =>
+    (this.data()?.ratingGraph.series ?? []).map(p => p.rating)
   );
 
-  heat = this._heat.asReadonly();
-
-  ratingProgress = computed(() => {
-    const { rating, maxRating } = this.stats();
-    if (!maxRating) return 0;
-    return Math.min(100, Math.round((rating / maxRating) * 100));
-  });
-
-  topTags = computed(() =>
-    [...this.tags()].sort((a, b) => b.solved - a.solved).slice(0, 5)
+  private _solvesByRating = computed<SolveBin[]>(() =>
+    (this.data()?.solvesByRating.bins ?? []).map(b => ({ label: b.label, solved: b.solved }))
   );
 
-  totalTagSolved = computed(() =>
-    this.tags().reduce((acc, t) => acc + t.solved, 0)
-  );
+  tags = computed<TagStat[]>(() => this.data()?.tags ?? []);
 
-  barData = computed(() => {
-    const max = Math.max(1, ...this.topTags().map(t => t.solved));
-    return this.topTags().map(t => ({
-      ...t,
-      pct: Math.round((t.solved / max) * 100),
-    }));
+  // ====== Rating Graph (SVG) ======
+  ratingW = 640;
+  ratingH = 220;
+  padding = { l: 34, r: 14, t: 14, b: 26 };
+
+  ratingMin = computed(() => {
+    const arr = this._ratingSeries();
+    return arr.length ? Math.min(...arr) : 0;
   });
 
-  setRange(r: '7d' | '30d' | '90d') {
-    this._range.set(r);
+  ratingMax = computed(() => {
+    const arr = this._ratingSeries();
+    return arr.length ? Math.max(...arr) : 1;
+  });
 
-    const base = this.stats();
-    if (r === '7d') {
-      this._stats.set({ ...base, solvedThisRange: 9, avgPerDay: 1.3 });
-    } else if (r === '30d') {
-      this._stats.set({ ...base, solvedThisRange: 32, avgPerDay: 1.1 });
-    } else {
-      this._stats.set({ ...base, solvedThisRange: 71, avgPerDay: 0.9 });
-    }
+  ratingPoints = computed(() => {
+    const data = this._ratingSeries();
+    const min = this.ratingMin();
+    const max = this.ratingMax();
+    const w = this.ratingW;
+    const h = this.ratingH;
+    const { l, r, t, b } = this.padding;
+
+    const innerW = w - l - r;
+    const innerH = h - t - b;
+    const denom = Math.max(1, max - min);
+
+    return data.map((v, i) => {
+      const x = l + (innerW * i) / Math.max(1, data.length - 1);
+      const y = t + innerH * (1 - (v - min) / denom);
+      return { x, y, v };
+    });
+  });
+
+  ratingPolyline = computed(() =>
+    this.ratingPoints().map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')
+  );
+
+  // ====== Solves by rating (SVG) ======
+  barsW = 640;
+  barsH = 300;
+  barsPadding = { l: 42, r: 16, t: 16, b: 34 };
+
+  solvesMax = computed(() => {
+    const bins = this._solvesByRating();
+    return bins.length ? Math.max(...bins.map(b => b.solved)) : 1;
+  });
+
+  bars = computed(() => {
+    const data = this._solvesByRating();
+    const max = this.solvesMax();
+    const w = this.barsW;
+    const h = this.barsH;
+    const { l, r, t, b } = this.barsPadding;
+
+    const innerW = w - l - r;
+    const innerH = h - t - b;
+
+    const barW = innerW / Math.max(1, data.length);
+    const gap = Math.min(8, barW * 0.18);
+    const realW = barW - gap;
+
+    return data.map((d, i) => {
+      const x = l + i * barW + gap / 2;
+      const hh = (d.solved / Math.max(1, max)) * innerH;
+      const y = t + (innerH - hh);
+
+      return {
+        ...d,
+        x,
+        y,
+        w: realW,
+        h: hh,
+        fill: this.binColor(Number(d.label)),
+      };
+    });
+  });
+
+  yTicks = computed(() => {
+    const max = this.solvesMax();
+    const top = Math.ceil(max / 50) * 50;
+    const ticks: number[] = [];
+    for (let v = 50; v <= top; v += 50) ticks.push(v);
+    return ticks;
+  });
+
+  private binColor(r: number) {
+    if (r <= 1100) return 'rgba(140,140,140,0.85)';
+    if (r <= 1500) return 'rgba(0,220,140,0.85)';
+    if (r <= 1800) return 'rgba(140,120,240,0.75)';
+    return 'rgba(255,90,170,0.75)';
   }
 
-  syncNow() {
-    const base = this.stats();
-    this._stats.set({ ...base, lastSync: '2026-01-12 14:22' });
+  constructor() {
+    // por ahora: DEMO
+    this._statsService.getMeDemo().subscribe();
+
+    // cuando exista el endpoint real, cambiás por:
+    // this._statsService.getMe('all').subscribe();
   }
 }

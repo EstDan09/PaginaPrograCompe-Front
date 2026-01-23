@@ -1,11 +1,25 @@
 <div class="page">
-  <h1>{{ "FOLLOWING.FOLLOWING_TITLE" | translate }}</h1>
-  @for (follow of following(); track $index) {
-    <div class="card">
-      <a class="foll" href="www.google.com">
-        {{ follow?.student_2_id }}
-      </a>
-    </div>
-  }
+  <h1 class="title">{{ "FOLLOWING.FOLLOWING_TITLE" | translate }}</h1>
 
+  <section class="card">
+    @if ((following()?.length ?? 0) > 0) {
+      <ul class="list">
+        @for (f of following(); track f._id ?? $index) {
+          <li class="row">
+            <div class="avatar">
+              {{ (displayName(f) | slice:0:1) }}
+            </div>
+
+            <a class="name" [routerLink]="['/user', 'profile', displayName(f)]">
+              {{ displayName(f) }}
+            </a>
+          </li>
+        }
+      </ul>
+    } @else {
+      <div class="empty">
+        <p class="empty-text">No estás siguiendo a nadie todavía.</p>
+      </div>
+    }
+  </section>
 </div>

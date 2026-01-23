@@ -1,36 +1,35 @@
 <div class="page">
-  <div class="card">
-    @if (assignment) {
-      <h1>
-        {{ "ASSIGNMENT.TITLE" | translate }}: {{ assignment._id }}
-      </h1>
+  @if (assignment) {
+    <div class="wrap">
+      <h1 class="group-title">Algorithm analysis</h1>
 
-      <p>
-        <strong>{{ "ASSIGNMENT.DESCRIPTION" | translate }}:</strong>
+      <h2 class="assignment-title">Assignment {{ assignment._id }}</h2>
+
+      <p class="desc">
         {{ assignment.description }}
       </p>
 
-      <p>
-        <strong>{{ "ASSIGNMENT.DUE_BEFORE" | translate }}:</strong>
-        {{ assignment.dueDate | date:'mediumDate' }}
-      </p>
+      <h3 class="sub">Problem list:</h3>
 
-      <h2>{{ "ASSIGNMENT.ASSIGNED_PROBLEMS" | translate }}</h2>
-
-      <div class="exercises">
-        @for (exercise of assignment.exercises; track $index) {
-          <div class="exercise">
-            <h3>
-              {{ "ASSIGNMENT.PROBLEM_ID" | translate }}: {{ exercise.problem_id }}
-            </h3>
-          </div>
+      <ol class="problem-list">
+        @for (ex of assignment.exercises; track ex.problem_id) {
+          <li class="problem-item">{{ ex.problem_id }}</li>
         }
+      </ol>
+
+      <div class="footer">
+        <button class="btn" type="button" (click)="verify()">Verify</button>
+        <span class="status">Not completed</span>
       </div>
-    } @else {
+    </div>
+  } @else {
+    <div class="wrap">
+      <h1 class="group-title">Algorithm analysis</h1>
+
       <div class="empty">
         <div class="empty-title">{{ "ASSIGNMENT.NOT_FOUND_TITLE" | translate }}</div>
         <p class="empty-text">{{ "ASSIGNMENT.NOT_FOUND_TEXT" | translate }}</p>
       </div>
-    }
-  </div>
+    </div>
+  }
 </div>
