@@ -30,7 +30,7 @@ export class BarChart {
     maintainAspectRatio: false,
 
     elements: {
-      line: { tension: 0.3 },
+
     },
 
     scales: {
@@ -49,6 +49,9 @@ export class BarChart {
       },
     },
 
+    interaction: {
+      mode: 'point',
+    },
 
 
     plugins: {

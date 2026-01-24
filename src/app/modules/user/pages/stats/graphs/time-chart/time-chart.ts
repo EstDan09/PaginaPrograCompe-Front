@@ -36,7 +36,7 @@ export class TimeChart {
     maintainAspectRatio: false,
 
     elements: {
-      line: { tension: 0.3 },
+      line: { tension: 0.1 },
     },
 
     scales: {
@@ -55,6 +55,9 @@ export class TimeChart {
       },
     },
 
+    interaction: {
+      mode: 'nearest'
+    },
 
     plugins: {
       legend: { display: true },
