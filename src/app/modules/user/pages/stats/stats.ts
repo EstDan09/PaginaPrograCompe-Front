@@ -1,12 +1,14 @@
 import { Component, computed, signal, effect, inject } from '@angular/core';
 import { StatsService } from '../../../../services/stats.service';
+import { TimeChart } from './graphs/time-chart/time-chart';
+import { BarChart } from './graphs/bar-chart/bar-chart';
 
 type TagStat = { tag: string; solved: number };
 type SolveBin = { label: string; solved: number }; // ej: "800", "900", ...
 
 @Component({
   selector: 'app-stats',
-  imports: [],
+  imports: [TimeChart, BarChart],
   templateUrl: './stats.html',
   styleUrl: './stats.scss',
 })
