@@ -2,6 +2,7 @@ import { Component, computed, signal, effect, inject } from '@angular/core';
 import { StatsService } from '../../../../services/stats.service';
 import { TimeChart } from './graphs/time-chart/time-chart';
 import { BarChart } from './graphs/bar-chart/bar-chart';
+import { AuthService } from '../../../../services/auth.service';
 
 type TagStat = { tag: string; solved: number };
 type SolveBin = { label: string; solved: number }; // ej: "800", "900", ...
@@ -14,6 +15,9 @@ type SolveBin = { label: string; solved: number }; // ej: "800", "900", ...
 })
 export class Stats {
   private _statsService = inject(StatsService);
+  private _authService = inject(AuthService);
+
+  userId = this._authService.userId;
 
   // Fuente única de verdad (cuando exista endpoint real, solo cambiás getMeDemo -> getMe)
   data = this._statsService.stats;
@@ -128,10 +132,17 @@ export class Stats {
   }
 
   constructor() {
-    // por ahora: DEMO
-    this._statsService.getMeDemo().subscribe();
+    effect(() => {
+      const id = this.userId(); // 👈 importante: llamar como función (signal)
+      if (!id || id === 'none') {
+        // si aún no se cargó el usuario, no pegues al backend
+        // opcional: solo para dev
+        this._statsService.getStudentStatsDemo().subscribe();
+        return;
+      }
 
-    // cuando exista el endpoint real, cambiás por:
-    // this._statsService.getMe('all').subscribe();
+      // ✅ endpoint real
+      this._statsService.getStudentStats(id, 'all').subscribe();
+    });
   }
 }

@@ -21,12 +21,12 @@ export class GroupService {
   private _group = signal<IGroupData | null>(null);
   readonly group = this._group.asReadonly();
 
-  private _summaryURL = `${environment.apiUrl}/student-group/my-groups-summary`;
+  private _summaryURL = `${environment.apiUrl}/group/my-groups-summary`;
 
   private _myGroupsSummary = signal<IMyGroupSummary[] | null>(null);
   readonly myGroupsSummary = this._myGroupsSummary.asReadonly();
 
-  private _groupDetailsURL = `${environment.apiUrl}/group/details/get`;
+  private _groupDetailsURL = `${environment.apiUrl}/group/details`;
   private _groupDetails = signal<IGroupDetails | null>(null);
   readonly groupDetails = this._groupDetails.asReadonly();
 

@@ -17,6 +17,6 @@ export class MyGroups {
   isEmpty = computed(() => (this.groups()?.length ?? 0) === 0);
 
   constructor() {
-    this._groupService.getMyGroupsSummaryDemo().subscribe();
+    this._groupService.getMyGroupsSummary().subscribe();
   }
 }

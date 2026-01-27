@@ -1,21 +1,27 @@
 <div class="page">
-  @if (assignment) {
+  @if (assignment()) {
     <div class="wrap">
-      <h1 class="group-title">Algorithm analysis</h1>
+      <h1 class="group-title">{{ assignment()!.title }}</h1>
 
-      <h2 class="assignment-title">Assignment {{ assignment._id }}</h2>
+      <h2 class="assignment-title">
+        Assignment {{ assignment()!._id }}
+      </h2>
 
       <p class="desc">
-        {{ assignment.description }}
+        {{ assignment()!.description }}
       </p>
 
       <h3 class="sub">Problem list:</h3>
 
-      <ol class="problem-list">
-        @for (ex of assignment.exercises; track ex.problem_id) {
-          <li class="problem-item">{{ ex.problem_id }}</li>
-        }
-      </ol>
+      @if (exercises().length) {
+        <ol class="problem-list">
+          @for (ex of exercises(); track ex.problem_id) {
+            <li class="problem-item">{{ ex.problem_id }}</li>
+          }
+        </ol>
+      } @else {
+        <p class="muted">No exercises loaded yet.</p>
+      }
 
       <div class="footer">
         <button class="btn" type="button" (click)="verify()">Verify</button>
@@ -24,8 +30,6 @@
     </div>
   } @else {
     <div class="wrap">
-      <h1 class="group-title">Algorithm analysis</h1>
-
       <div class="empty">
         <div class="empty-title">{{ "ASSIGNMENT.NOT_FOUND_TITLE" | translate }}</div>
         <p class="empty-text">{{ "ASSIGNMENT.NOT_FOUND_TEXT" | translate }}</p>

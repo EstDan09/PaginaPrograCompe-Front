@@ -1,37 +1,75 @@
-import { Injectable } from '@angular/core';
-import { IAssignment, IExercise } from '../models/assignment.model';
+import { inject, Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
+import { catchError, forkJoin, of, tap } from 'rxjs';
+import { IAssignmentData, IExercise, IExerciseData } from '../models/assignment.model';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class AssignmentService {
-  ecxercises: IExercise[] = [
-    {
-      title: "placeholder",
-      points: 5,
-      problem_id: "10542",
-    },
-    {
-      title: "placeholder",
-      points: 5,
-      problem_id: "1054e",
-    },
-    {
-      title: "placeholder",
-      points: 5,
-      problem_id: "1054g",
-    },
-  ]
-  assignments: IAssignment[] = [
-    {
-      _id: '0',
-      description: 'placeholder',
-      dueDate: new Date('2026-01-01'),
-      exercises: this.ecxercises,
-    },
-  ]
+  private _http = inject(HttpClient);
+
+  private _assignmentURL = `${environment.apiUrl}/assignment/get`;
+  private _exerciseURL = `${environment.apiUrl}/exercise/get`;
+
+  private _assignment = signal<IAssignmentData | null>(null);
+  readonly assignment = this._assignment.asReadonly();
+
+  private _exercises = signal<IExercise[]>([]);
+  readonly exercises = this._exercises.asReadonly();
 
   getAssignmentById(id: string) {
-    return this.assignments.find(u => u._id === id);
+    return this._http.get<IAssignmentData>(`${this._assignmentURL}/${id}`).pipe(
+      tap((a) => this._assignment.set(a)),
+      catchError((err) => {
+        console.log('Failed to load assignment, using demo', err);
+        this._assignment.set(this.demoAssignment(id));
+        return of(null);
+      })
+    );
+  }
+
+  getExercisesByAssignment(assignmentId: string) {
+    return this._http
+      .get<IExerciseData[]>(`${this._exerciseURL}?parent_assignment=${assignmentId}`)
+      .pipe(
+        tap((rows) => {
+          const mapped: IExercise[] = (rows ?? []).map((x) => ({
+            title: x.name,
+            points: 0, 
+            problem_id: x.cf_code, 
+          }));
+          this._exercises.set(mapped);
+        }),
+        catchError((err) => {
+          console.log('Failed to load exercises, using demo', err);
+          this._exercises.set(this.demoExercises());
+          return of(null);
+        })
+      );
+  }
+
+  loadAssignmentScreen(id: string) {
+    return forkJoin([
+      this.getAssignmentById(id),
+      this.getExercisesByAssignment(id),
+    ]);
+  }
+
+  private demoAssignment(id: string): IAssignmentData {
+    return {
+      _id: id,
+      title: 'Week 1 - Greedy (demo)',
+      description: 'placeholder (demo)',
+      due_date: '2026-02-01T00:00:00.000Z',
+      parent_group: '000000000000000000000000',
+    };
+  }
+
+  private demoExercises(): IExercise[] {
+    return [
+      { title: 'placeholder', points: 5, problem_id: '10542' },
+      { title: 'placeholder', points: 5, problem_id: '1054e' },
+      { title: 'placeholder', points: 5, problem_id: '1054g' },
+    ];
   }
 }
