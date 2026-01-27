@@ -20,7 +20,7 @@ export class Group {
 
     console.log('Group ID:', id);
 
-    this.groupService.getGroupDetailsDemo(id).subscribe();
+    this.groupService.getGroupDetails(id).subscribe();
 
   }
 

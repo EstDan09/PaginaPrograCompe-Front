@@ -7,23 +7,28 @@ import { IStatsMeResponse } from '../models/stats.model';
 @Injectable({ providedIn: 'root' })
 export class StatsService {
   private _http = inject(HttpClient);
-  private _URL = `${environment.apiUrl}/stats/me`;
+  private _URL = `${environment.apiUrl}/stats/get-student-stats`;
 
   private _stats = signal<IStatsMeResponse | null>(null);
   readonly stats = this._stats.asReadonly();
 
-  getMe(range: 'all' | '90d' | '30d' | '7d' = 'all') {
-    return this._http.get<IStatsMeResponse>(`${this._URL}?range=${range}`).pipe(
-      tap((res) => this._stats.set(res)),
-      catchError((err) => {
-        console.log('Failed to load /stats/me, using demo', err);
-        this._stats.set(this.demoPayload());
-        return of(null);
-      })
-    );
+  getStudentStats(
+    studentId: string,
+    range: 'all' | '90d' | '30d' | '7d' = 'all'
+  ) {
+    return this._http
+      .get<IStatsMeResponse>(`${this._URL}/${studentId}?range=${range}`)
+      .pipe(
+        tap((res) => this._stats.set(res)),
+        catchError((err) => {
+          console.log('Failed to load student stats, using demo', err);
+          this._stats.set(this.demoPayload());
+          return of(null);
+        })
+      );
   }
 
-  getMeDemo() {
+  getStudentStatsDemo() {
     this._stats.set(this.demoPayload());
     return of(this._stats());
   }

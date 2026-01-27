@@ -15,6 +15,23 @@ export interface IAssignmentSummary {
   _id: string;
   title: string;
   description?: string | null;
-  due_date?: string | null;    
+  due_date?: string | null;
   exerciseCount: number;
 }
+
+export interface IAssignmentData {
+  _id: string;
+  title: string;
+  description?: string | null;
+  due_date?: string | null;          
+  parent_group: string;              
+}
+
+export interface IExerciseData {
+  _id: string;
+  name: string;
+  cf_code: string;
+  parent_assignment: string;
+}
+
+

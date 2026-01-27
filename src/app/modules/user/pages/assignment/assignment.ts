@@ -1,9 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { DatePipe } from '@angular/common';
-import { TranslatePipe } from '@ngx-translate/core';
-import { IAssignment } from '../../../../models/assignment.model';
-import { AssignmentService } from '../../../../services/assignment.service';
 import { ActivatedRoute } from '@angular/router';
+import { AssignmentService } from '../../../../services/assignment.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-assignment',
@@ -15,14 +13,15 @@ export class Assignment {
   private route = inject(ActivatedRoute);
   private assignmentService = inject(AssignmentService);
 
-  assignment: IAssignment | undefined;
-
+  assignment = this.assignmentService.assignment;   
+  exercises = this.assignmentService.exercises;
+      
   constructor() {
-    const assignmentId: string = this.route.snapshot.params['id'];
-    this.assignment = this.assignmentService.getAssignmentById(assignmentId);
+    const id = this.route.snapshot.params['id'];
+    this.assignmentService.loadAssignmentScreen(id).subscribe();
   }
 
   verify() {
-  console.log('Verify clicked for assignment:', this.assignment?._id);
-}
+    console.log('verify clicked');
+  }
 }
