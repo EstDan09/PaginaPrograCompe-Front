@@ -3,7 +3,6 @@ import { SlicePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { FollowingService } from '../../../../services/following.service';
-import { IFollow } from '../../../../models/following-list.model';
 
 @Component({
   selector: 'app-following',
@@ -18,18 +17,15 @@ export class Following {
   following = this._followingService.followingList;
 
   constructor() {
-    this._followingService.getFollowing().subscribe((res) => {
-      if (!res) console.log('FAILED TO LOAD FRIENDS');
-    });
+    this._followingService.getFollowing().subscribe();
   }
 
   setLang(lang: 'es' | 'en') {
     this._translateService.use(lang);
   }
 
-  displayName(f: IFollow): string {
-    const raw = (f as any)?.student_2_id ?? (f as any)?.student2 ?? (f as any)?.to ?? '';
-    const str = String(raw);
-    return str.length ? str : 'unknown';
+  safeName(name: unknown): string {
+    const s = String(name ?? '').trim();
+    return s.length ? s : 'unknown';
   }
 }

@@ -1,17 +1,17 @@
 <div class="page">
-  <h1 class="title">{{ "FOLLOWING.FOLLOWING_TITLE" | translate }}</h1>
+  <h1 class="title">Following</h1>
 
   <section class="card">
-    @if ((following()?.length ?? 0) > 0) {
+    @if (following().length > 0) {
       <ul class="list">
-        @for (f of following(); track f._id ?? $index) {
+        @for (f of following(); track f.name) {
           <li class="row">
             <div class="avatar">
-              {{ (displayName(f) | slice:0:1) }}
+              {{ (safeName(f.name) | slice:0:1) }}
             </div>
 
-            <a class="name" [routerLink]="['/user', 'profile', displayName(f)]">
-              {{ displayName(f) }}
+            <a class="name" [routerLink]="['/user', 'profile', safeName(f.name)]">
+              {{ safeName(f.name) }}
             </a>
           </li>
         }

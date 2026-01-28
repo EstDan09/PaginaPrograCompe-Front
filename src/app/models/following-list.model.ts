@@ -6,6 +6,15 @@ export interface IFollow {
   updatedAt: string;
 }
 
+export interface IFollowName {
+  name: string;
+}
+
+export interface IFollowingResponse {
+  following: IFollowName[];
+}
+
+
 export interface IFollowingList {
   following: IFollow[];
 }
