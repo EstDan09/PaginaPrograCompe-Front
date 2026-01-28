@@ -2,7 +2,8 @@ import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { catchError, forkJoin, of, tap } from 'rxjs';
-import { IAssignmentData, IExercise, IExerciseData } from '../models/assignment.model';
+import { IAssignmentData, ICreateAssign, IExercise, IExerciseData, IProblem } from '../models/assignment.model';
+import { IGroupErr } from '../models/group.model';
 
 @Injectable({ providedIn: 'root' })
 export class AssignmentService {
@@ -10,6 +11,7 @@ export class AssignmentService {
 
   private _assignmentURL = `${environment.apiUrl}/assignment/get`;
   private _exerciseURL = `${environment.apiUrl}/exercise/get`;
+  private _CREATE = `${environment.apiUrl}/assignment/create-with-exercises`
 
   private _assignment = signal<IAssignmentData | null>(null);
   readonly assignment = this._assignment.asReadonly();
@@ -35,8 +37,8 @@ export class AssignmentService {
         tap((rows) => {
           const mapped: IExercise[] = (rows ?? []).map((x) => ({
             title: x.name,
-            points: 0, 
-            problem_id: x.cf_code, 
+            points: 0,
+            problem_id: x.cf_code,
           }));
           this._exercises.set(mapped);
         }),
@@ -71,5 +73,30 @@ export class AssignmentService {
       { title: 'placeholder', points: 5, problem_id: '1054e' },
       { title: 'placeholder', points: 5, problem_id: '1054g' },
     ];
+  }
+
+
+
+  postCreateAssignment(name: string, desc: string, problems: string[], groupId: string, due: Date | null) {
+
+    const dumb: IProblem[] = [];
+    problems.forEach((p) => {
+      const pre = {
+        name: p,
+        cf_code: p
+      }
+      dumb.push(pre);
+    })
+
+    const req = {
+      title: name,
+      description: desc,
+      parent_group: groupId,
+      due_date: due,
+      exercises: dumb
+
+    }
+    return this._http.post<ICreateAssign | IGroupErr>(this._CREATE, req);
+
   }
 }

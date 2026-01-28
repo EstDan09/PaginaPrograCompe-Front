@@ -23,8 +23,8 @@ export interface IAssignmentData {
   _id: string;
   title: string;
   description?: string | null;
-  due_date?: string | null;          
-  parent_group: string;              
+  due_date?: string | null;
+  parent_group: string;
 }
 
 export interface IExerciseData {
@@ -32,6 +32,19 @@ export interface IExerciseData {
   name: string;
   cf_code: string;
   parent_assignment: string;
+}
+
+export interface ICreateAssign {
+  _id: string;
+  title: string;
+  description: string;
+  dueDate: Date,
+  parent_group: string
+}
+
+export interface IProblem {
+  name: string;
+  cf_code: string;
 }
 
 

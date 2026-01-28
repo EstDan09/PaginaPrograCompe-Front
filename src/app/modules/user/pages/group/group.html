@@ -4,8 +4,12 @@
     <div>
       <h1 class="title">{{ g.group.name }}</h1>
       <p class="owner">Owner: {{ g.group.owner.username }}</p>
-      @if (isCoach()) {
-        <button (click)="add()">Add member</button>
+
+      @if(isCoach()) {
+        <div class="buttCont">
+          <button (click)="add()">Add member</button>
+          <button (click)="addAssign()">Create assignment</button>
+        </div>
       }
     </div>
 
