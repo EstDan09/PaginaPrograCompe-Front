@@ -1,37 +1,37 @@
 <div class="page">
   <form class="card" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <header class="header">
-      <h1>Inicia Sesión</h1>
-      <p class="subtitle">{{ "LOGIN.SUBTITLE" | translate }}</p>
+      <h1>Sign in</h1>
+      <p class="subtitle">Access your CFTrainer account</p>
     </header>
 
     <label class="field">
-      <span>{{ "LOGIN.USERNAME" | translate }}</span>
+      <span>Username</span>
       <input
         type="text"
         autocomplete="username"
         formControlName="username"
-        [placeholder]="'LOGIN.USERNAME_PLACEHOLDER' | translate"
+        placeholder="Enter your username"
       />
     </label>
 
     <label class="field">
-      <span>{{ "LOGIN.PASSWORD" | translate }}</span>
+      <span>Password</span>
       <input
         type="password"
         autocomplete="current-password"
         formControlName="password"
-        [placeholder]="'LOGIN.PASSWORD_PLACEHOLDER' | translate"
+        placeholder="Enter your password"
       />
     </label>
 
     <div class="actions">
       <button class="btn btn-primary" type="submit">
-        {{ "LOGIN.SUBMIT" | translate }}
+        Sign in
       </button>
 
       <button class="btn btn-ghost" type="button" (click)="onCreateAccount()">
-        {{ "LOGIN.CREATE_ACCOUNT" | translate }}
+        Create account
       </button>
     </div>
   </form>
