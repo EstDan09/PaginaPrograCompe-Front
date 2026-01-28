@@ -3,6 +3,12 @@
     <h1 class="title">My Groups</h1>
   </div>
 
+  @if(roleSignal()) {
+    <button class="creator" (click)="create()">
+      Create group
+    </button>
+  }
+
   @if (groups()?.length) {
     <div class="stack">
       @for (g of groups(); track g.groupId) {

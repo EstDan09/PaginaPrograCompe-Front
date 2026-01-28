@@ -1,0 +1,39 @@
+<div class="page">
+  @if(success()) {
+  <div class="card">
+
+    <h1>
+      Member added successfully
+    </h1>
+  </div>
+  }
+
+  @else {
+
+    <form class="card" [formGroup]="addForm" (ngSubmit)="onSubmit()">
+
+      @if(failed()) {
+        <h1>
+          Failed to add member. Please try again
+        </h1>
+      }
+
+
+        <label class="field">
+          <input
+            type="text"
+            autocomplete="NiceName"
+            formControlName="studentName"
+            placeholder="student name (required)"
+          />
+        </label>
+
+        <button class="sub" type="submit">Add member</button>
+
+
+    </form>
+
+
+  }
+</div>
+

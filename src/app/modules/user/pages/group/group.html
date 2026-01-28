@@ -4,6 +4,9 @@
     <div>
       <h1 class="title">{{ g.group.name }}</h1>
       <p class="owner">Owner: {{ g.group.owner.username }}</p>
+      @if(isCoach()) {
+        <button (click)="add()">Add member</button>
+      }
     </div>
 
     <button class="btn" type="button">
