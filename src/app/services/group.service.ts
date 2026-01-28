@@ -1,5 +1,6 @@
-import { inject, Injectable, signal } from '@angular/core';
-import { IGroup, IGroupData, IGroupDetails, IMyGroupSummary, ICreatedGroup, IAddition, IGroupErr } from '../models/group.model';
+import { inject, Injectable, signal, computed } from '@angular/core';
+import { IGroup, IGroupData, IGroupDetails, 
+  IMyGroupSummary, ICreatedGroup, IAddition, IGroupErr, IStudentGroupUsername } from '../models/group.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { catchError, of, tap } from 'rxjs';
@@ -25,12 +26,43 @@ export class GroupService {
 
   private _summaryURL = `${environment.apiUrl}/group/my-groups-summary`;
 
+  private _membersWithUsernameURL = `${environment.apiUrl}/student-group/get-with-username`;
+
+  private _groupMembers = signal<IStudentGroupUsername[] | null>(null);
+  readonly groupMembers = this._groupMembers.asReadonly();
+
+  readonly groupMemberUsernames = computed(() =>
+    (this._groupMembers() ?? []).map(m => m.student_username)
+  );
+
+
   private _myGroupsSummary = signal<IMyGroupSummary[] | null>(null);
   readonly myGroupsSummary = this._myGroupsSummary.asReadonly();
 
   private _groupDetailsURL = `${environment.apiUrl}/group/details`;
   private _groupDetails = signal<IGroupDetails | null>(null);
   readonly groupDetails = this._groupDetails.asReadonly();
+
+  getGroupMembers(groupId: string) {
+    return this._http
+      .get<IStudentGroupUsername[]>(`${this._membersWithUsernameURL}?group_id=${groupId}`)
+      .pipe(
+        tap((rows) => this._groupMembers.set(rows)),
+        catchError((err) => {
+          console.log('Failed to load group members, using demo', err);
+
+          const demo: IStudentGroupUsername[] = [
+            { _id: '1', student_id: 's1', student_username: 'fisher199', group_id: groupId },
+            { _id: '2', student_id: 's2', student_username: 'eddituss', group_id: groupId },
+            { _id: '3', student_id: 's3', student_username: 'zenidog', group_id: groupId },
+            { _id: '4', student_id: 's4', student_username: 'tourist', group_id: groupId },
+          ];
+
+          this._groupMembers.set(demo);
+          return of(demo);
+        })
+      );
+  }
 
   getMyGroupsSummary() {
     return this._http.get<IMyGroupSummary[]>(this._summaryURL).pipe(
@@ -67,49 +99,6 @@ export class GroupService {
 
   }
 
-  getMyGroupsSummaryDemo() {
-    const demoData: IMyGroupSummary[] = [
-      {
-        groupId: '1',
-        name: 'Algorithm analysis',
-        owner: 'eddituss',
-        membersCount: 23,
-        role: 'Student',
-        dueAssignments: 2,
-      },
-      {
-        groupId: '2',
-        name: 'Todo es mental',
-        owner: 'Fisher',
-        membersCount: 5,
-        role: 'Student',
-        dueAssignments: 0,
-      },
-      {
-        groupId: '3',
-        name: 'POO',
-        owner: 'zenidog',
-        membersCount: 15,
-        role: 'Student',
-        dueAssignments: 3,
-      },
-      {
-        groupId: '4',
-        name: 'Algorithm analysis',
-        owner: 'eddituss',
-        membersCount: 23,
-        role: 'Student',
-        dueAssignments: 2,
-      },
-    ];
-
-    // Simula "respuesta de API"
-    this._myGroupsSummary.set(demoData);
-
-    // Devolvemos observable para que el componente no cambie
-    return of(demoData);
-  }
-
   getGroupDetails(id: string) {
     return this._http.get<IGroupDetails>(`${this._groupDetailsURL}/${id}`).pipe(
       tap((payload) => {
@@ -121,40 +110,6 @@ export class GroupService {
         return of(null);
       })
     );
-  }
-
-  getGroupDetailsDemo(id: string) {
-    const demo: IGroupDetails = {
-      group: {
-        _id: id,
-        name: 'Algorithm analysis',
-        description: 'Grupo demo mientras se habilita el endpoint.',
-        owner: {
-          _id: 'coach_1',
-          username: 'eddituss',
-          role: 'coach',
-        },
-      },
-      assignments: [
-        {
-          _id: '0',
-          title: 'Week 1 - Greedy',
-          description: 'Resolver 10 problemas greedy',
-          due_date: '2026-02-01T00:00:00.000Z',
-          exerciseCount: 3,
-        },
-        {
-          _id: 'a2',
-          title: 'Week 2 - DP',
-          description: null,
-          due_date: null,
-          exerciseCount: 0,
-        },
-      ],
-    };
-
-    this._groupDetails.set(demo);
-    return of(demo);
   }
 
   postCreateGroup(name: string, description: string) {

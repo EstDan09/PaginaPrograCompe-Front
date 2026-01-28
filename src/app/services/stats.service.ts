@@ -1,6 +1,6 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, finalize, of, tap, throwError } from 'rxjs';
+import { catchError, finalize, of, tap, throwError, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { IStatsMeResponse } from '../models/stats.model';
 
@@ -18,7 +18,6 @@ export class StatsService {
   private _error = signal<string | null>(null);
   readonly error = this._error.asReadonly();
 
-  /** Limpia estado (útil al cambiar de usuario/rango) */
   reset() {
     this._stats.set(null);
     this._error.set(null);
@@ -58,7 +57,13 @@ export class StatsService {
       );
   }
 
-  /** Solo si vos querés demo manualmente (por dev) */
+  getStudentStatsOnce(
+    studentId: string,
+    range: 'all' | '90d' | '30d' | '7d' = 'all'
+  ): Observable<IStatsMeResponse> {
+    return this._http.get<IStatsMeResponse>(`${this._URL}/${studentId}?range=${range}`);
+  }
+
   setDemo(payload: IStatsMeResponse) {
     this._stats.set(payload);
   }

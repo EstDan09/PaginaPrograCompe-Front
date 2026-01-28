@@ -1,0 +1,176 @@
+.page {
+  padding: 22px 18px 40px;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.head {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+.sub {
+  margin: 6px 0 0;
+  opacity: 0.8;
+  line-height: 1.4;
+}
+
+.search {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.input {
+  flex: 1;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 14px;
+  padding: 12px 14px;
+  outline: none;
+  color: inherit;
+}
+
+.input:focus {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.btn-ghost {
+  border: none;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 10px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.card {
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 18px;
+  padding: 8px;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+}
+
+.item + .item {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.q {
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  padding: 14px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.q-text {
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.chev {
+  opacity: 0.7;
+  transition: transform 180ms ease;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.chev.open {
+  transform: rotate(180deg);
+  opacity: 1;
+}
+
+.a {
+  padding: 0 12px 14px;
+}
+
+.a-text {
+  margin: 0;
+  opacity: 0.9;
+  line-height: 1.55;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  opacity: 0.9;
+}
+
+.empty {
+  padding: 18px 12px;
+  text-align: center;
+}
+
+.empty-title {
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.empty-text {
+  opacity: 0.8;
+  margin: 0;
+}
+
+.hint-card {
+  margin-top: 14px;
+  border-radius: 18px;
+  padding: 14px 16px;
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.hint-title {
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.hint-text {
+  margin: 0;
+  opacity: 0.85;
+  line-height: 1.45;
+}
+
+@media (min-width: 860px) {
+  .head {
+    grid-template-columns: 1fr auto;
+    align-items: end;
+  }
+
+  .search {
+    min-width: 420px;
+  }
+}
