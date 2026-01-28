@@ -19,12 +19,12 @@ export interface IGroupData {
 }
 
 export interface IMyGroupSummary {
-  groupId: string;          
-  name: string;             
-  owner: string;    
-  membersCount: number;     
+  groupId: string;
+  name: string;
+  owner: string;
+  membersCount: number;
   role: 'Student' | 'Coach' | 'Admin';
-  dueAssignments: number;   
+  dueAssignments: number;
 }
 
 export interface IGroupDetails {
@@ -35,6 +35,25 @@ export interface IGroupDetails {
     owner: IUserMini;
   };
   assignments: IAssignmentSummary[];
+}
+
+export interface ICreatedGroup {
+  _id: string,
+  name: string,
+  description: string,
+  parent_coach: string,
+  group_messages: [
+    {
+      sender_id: string,
+      message: string,
+      timestamp: Date,
+    }
+  ],
+  invite_code: string,
+}
+
+export interface IGroupErr {
+  message: string
 }
 
 

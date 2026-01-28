@@ -1,0 +1,45 @@
+<div class="page">
+  @if(success()) {
+  <div class="card">
+
+    <h1>
+      Group created successfully
+    </h1>
+  </div>
+  }
+
+  @else {
+
+
+    <form class="card" [formGroup]="groupForm" (ngSubmit)="onSubmit()">
+      @if(failed()) {
+        <h1>Failed to create group, try again</h1>
+      }
+
+
+        <label class="field">
+          <input
+            type="text"
+            autocomplete="NiceName"
+            formControlName="groupName"
+            placeholder="groupName (required)"
+          />
+        </label>
+
+        <label class="field">
+          <input
+            type="text"
+            autocomplete="NiceName"
+            formControlName="description"
+            placeholder="description (required)"
+          />
+        </label>
+        <button class="sub" type="submit">Create group</button>
+
+
+    </form>
+
+
+  }
+</div>
+
