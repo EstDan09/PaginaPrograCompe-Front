@@ -1,0 +1,110 @@
+<div class="page">
+  @if(success()) {
+  <div class="card">
+
+    <h1>
+      Assignment created successfully!
+    </h1>
+    <h1>You can now leave this pop up</h1>
+  </div>
+  }
+
+  @else {
+
+
+
+    @if(next()) {
+
+
+
+
+    <form class="card" [formGroup]="problem" (ngSubmit)="addProblem()">
+
+      @if(failed()) {
+        <h2>Failed to create assignment</h2>
+      }
+
+    <h2>Select problems for assignment</h2>
+      <label class="field">
+        <input
+          type="text"
+          autocomplete="NiceName"
+          formControlName="prob"
+          placeholder="CF problem ID (1234C)"
+        />
+      </label>
+
+      <div class="clash">
+        <button class="sub" type="submit">Add problem</button>
+        @if(problems().length != 0) {
+          <button class="sub" (click)="onSubmit()">Create assignment</button>
+
+          @for(p of problems(); track $index) {
+
+            <h1> {{ p }} </h1>
+          }
+        }
+      </div>
+    </form>
+    }
+
+    @else {
+
+    <form class="card" [formGroup]="addForm" (ngSubmit)="onNext()">
+
+      <h2>Assignment Name</h2>
+
+      <label class="field">
+        <input
+          type="text"
+          autocomplete="NiceName"
+          formControlName="assignmentName"
+          placeholder="assignment name (required)"
+        />
+      </label>
+
+      <h2>Assignment description</h2>
+
+      <label class="field">
+        <input
+          type="text"
+          autocomplete="NiceName"
+          formControlName="desc"
+          placeholder="description (not required)"
+        />
+      </label>
+
+      <h2>Pick a due date</h2>
+
+      <mat-form-field>
+        <mat-label>Assignment due date</mat-label>
+
+        <input
+          matInput
+          [matDatepicker]="picker"
+          formControlName="dueDate"
+        />
+
+        <mat-hint>DD/MM/YYYY</mat-hint>
+
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker">
+        </mat-datepicker-toggle>
+
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+
+      <button class="sub" type="submit">next</button>
+
+
+
+    </form>
+
+    }
+
+
+  }
+</div>
+

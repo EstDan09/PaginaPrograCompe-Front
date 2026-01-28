@@ -7,7 +7,7 @@ import { AuthService } from '../../../../services/auth.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AdderDialog } from './adder-dialog/adder-dialog';
 import { GroupMembersDialog } from './group-members-dialog/group-members-dialog';
-
+import { AssignmentDialog } from './assignment-dialog/assignment-dialog';
 
 @Component({
   selector: 'app-group',
@@ -34,6 +34,16 @@ export class Group {
       }
     });
     console.log("CLICKED");
+  }
+
+  addAssign = () => {
+    this.dialog?.open(AssignmentDialog, {
+      width: '50%',
+      height: '60%',
+      data: {
+        groupId: this.route.snapshot.params['id'],
+      },
+    })
   }
 
   isCoach = computed(() => {
