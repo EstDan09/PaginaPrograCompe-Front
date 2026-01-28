@@ -10,19 +10,14 @@ import { AuthService } from '../../../../services/auth.service';
   styleUrl: './user-layout.scss',
 })
 export class UserLayout {
-
   private _authService = inject(AuthService);
 
-  user = this._authService.user
-  userId = this._authService.userId;
-  username = this._authService.username;
-
+  user = this._authService.user;
+  role = this._authService.role;
 
   myGroupsLink = computed(() => ['/user', 'my-groups']);
-
   myStatsLink = computed(() => ['/user', 'stats']);
-
-  myFollowsLink = computed(() => ['/user', 'following'])
+  myFollowsLink = computed(() => ['/user', 'following']);
 
   onLogout() {
     this._authService.logout();

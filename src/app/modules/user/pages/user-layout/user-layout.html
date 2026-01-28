@@ -29,9 +29,11 @@
         challenges
       </a>
 
-      <a routerLink="/user/verification" routerLinkActive="active">
-        verification
-      </a>
+      @if (role() !== 'coach') {
+  <a routerLink="/user/verification" routerLinkActive="active">
+    verification
+  </a>
+}
     </div>
 
     <div class="right">
