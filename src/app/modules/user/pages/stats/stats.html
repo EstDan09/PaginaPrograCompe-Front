@@ -1,51 +1,79 @@
 <div class="page">
   <div class="wrap">
 
-    <!-- KPIs -->
-    <section class="kpis">
-      <div class="kpi">
-        <div class="kpi-title">Rating</div>
-        <div class="kpi-value">{{ rating() }}</div>
-      </div>
+    @if (loading()) {
+      <section class="loading-card">
+        <span class="spinner"></span>
+        <div>
+          <div class="loading-title">Cargando estadísticas…</div>
+          <div class="loading-sub">Esto puede tomar unos segundos.</div>
+        </div>
+      </section>
+    } @else if (error()) {
+      <section class="error-card">
+        <div class="error-title">No se pudieron cargar tus stats</div>
+        <div class="error-sub">{{ error() }}</div>
+      </section>
+    } @else if (data(); as d) {
 
-      <div class="kpi">
-        <div class="kpi-title">Solved</div>
-        <div class="kpi-value">{{ solved() }}</div>
-      </div>
+      <!-- KPIs -->
+      <section class="kpis">
+        <div class="kpi">
+          <div class="kpi-title">Rating</div>
+          <div class="kpi-value">{{ d.kpis.rating }}</div>
+        </div>
 
-      <div class="kpi">
-        <div class="kpi-title">Streak</div>
-        <div class="kpi-value">{{ streakDays() }} days</div>
-      </div>
-    </section>
+        <div class="kpi">
+          <div class="kpi-title">Solved</div>
+          <div class="kpi-value">{{ d.kpis.solvedTotal }}</div>
+        </div>
 
-    <!-- Rating Graph -->
-    <section class="card">
-      <h2 class="card-title">Rating Graph</h2>
-      <app-time-chart></app-time-chart>
+        <div class="kpi">
+          <div class="kpi-title">Streak</div>
+          <div class="kpi-value">{{ d.kpis.streakDays }} days</div>
+        </div>
+      </section>
 
-    </section>
+      <!-- Rating Graph -->
+      <section class="card">
+        <h2 class="card-title">Rating Graph</h2>
 
-    <!-- Solves by rating -->
-    <section class="card">
-      <h2 class="card-title">Solves by rating</h2>
-      <app-bar-chart></app-bar-chart>
+        <!-- ✅ pasá la data al chart -->
+        <app-time-chart [series]="d.ratingGraph.series"></app-time-chart>
+      </section>
 
-    </section>
+      <!-- Solves by rating -->
+      <section class="card">
+        <h2 class="card-title">Solves by rating</h2>
 
-    <!-- Tags -->
-    <section class="card">
-      <h2 class="card-title">Tags</h2>
+        <!-- ✅ pasá bins al chart -->
+        <app-bar-chart [bins]="d.solvesByRating.bins"></app-bar-chart>
+      </section>
 
-      <div class="tags">
-        @for (t of tags(); track t.tag) {
-          <div class="tag-row">
-            <span class="tag-name">{{ t.tag }}</span>
-            <span class="tag-val">{{ t.solved }}</span>
-          </div>
-        }
-      </div>
-    </section>
+      <!-- Tags -->
+      <section class="card">
+        <h2 class="card-title">Tags</h2>
+
+        <div class="tags">
+          @for (t of d.tags; track t.tag) {
+            <div class="tag-row">
+              <span class="tag-name">{{ t.tag }}</span>
+              <span class="tag-val">{{ t.solved }}</span>
+            </div>
+          }
+        </div>
+      </section>
+
+    } @else {
+      <!-- estado inicial por si aún no hay userId -->
+      <section class="loading-card">
+        <span class="spinner"></span>
+        <div>
+          <div class="loading-title">Preparando tu perfil…</div>
+          <div class="loading-sub">Esperando tu sesión.</div>
+        </div>
+      </section>
+    }
 
   </div>
 </div>

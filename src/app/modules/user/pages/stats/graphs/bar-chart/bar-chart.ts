@@ -1,71 +1,40 @@
-import { Component } from '@angular/core';
+import { Component, computed, effect, input, ViewChild } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartType } from 'chart.js';
 
-
+type Bin = { from: number; to: number; label: string; solved: number };
 
 @Component({
   selector: 'app-bar-chart',
+  standalone: true,
   imports: [BaseChartDirective],
   templateUrl: './bar-chart.html',
   styleUrl: './bar-chart.scss',
 })
 export class BarChart {
+  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
+  bins = input<Bin[]>([]);
   public barChartType: ChartType = 'bar';
 
-  public barChartData: ChartConfiguration['data'] = {
+  public barChartData = computed<ChartConfiguration<'bar'>['data']>(() => ({
+    labels: this.bins().map(b => b.label),
     datasets: [
-      {
-        data: [280, 120, 100, 130, 80, 75, 90],
-        label: 'Series A',
-        fill: 'origin',
-      },
+      { label: 'Solved', data: this.bins().map(b => b.solved) },
     ],
-    labels: [800, 900, 1000, 1100, 1200, 1300, 1400],
-  };
+  }));
 
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
     maintainAspectRatio: false,
-
-    elements: {
-
-    },
-
-    scales: {
-      y: { position: 'left' },
-      y1: { position: 'right' },
-    },
-
-    animations: {
-      x: {
-        duration: 800,
-        easing: 'easeOutQuart',
-      },
-      y: {
-        duration: 800,
-        easing: 'easeOutQuart',
-      },
-    },
-
-    interaction: {
-      mode: 'point',
-    },
-
-
-    plugins: {
-      legend: { display: true },
-      annotation: {
-        annotations: [
-          {
-            scaleID: 'x',
-            value: 'March',
-            borderColor: 'orange',
-            borderWidth: 2,
-          },
-        ],
-      },
-    },
+    plugins: { legend: { display: true } },
+    scales: { y: { beginAtZero: true } },
   };
+
+  constructor() {
+    effect(() => {
+      this.barChartData();
+      queueMicrotask(() => this.chart?.update());
+    });
+  }
 }
