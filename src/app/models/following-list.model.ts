@@ -7,7 +7,7 @@ export interface IFollow {
 }
 
 export interface IFollowName {
-  _id?: string;
+  student_id: string;
   name: string;
 }
 

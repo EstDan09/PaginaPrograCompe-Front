@@ -22,6 +22,7 @@ export class Following {
 
   constructor() {
     this._followingService.getFollowing().subscribe();
+    console.log(this.following());
   }
 
   setLang(lang: 'es' | 'en') {
@@ -34,11 +35,15 @@ export class Following {
   }
 
   openProfile(f: IFollowName) {
+    console.log(this.following()); //aca si simprime nombre y id
+
+    console.log(f.student_id); //aca sale el id undefined
+
     this._dialog.open(FollowingProfileDialog, {
       width: '520px',
       maxWidth: '92vw',
       data: {
-        userId: f._id,
+        userId: f.student_id,
         username: this.safeName(f.name),
       },
     });

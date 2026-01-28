@@ -4,7 +4,7 @@
   <section class="card">
     @if (following().length > 0) {
       <ul class="list">
-        @for (f of following(); track f._id) {
+        @for (f of following(); track f.student_id) {
           <li class="row" role="button" tabindex="0" (click)="openProfile(f)">
             <div class="avatar">
               {{ (safeName(f.name) | slice:0:1) }}
