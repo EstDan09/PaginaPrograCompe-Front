@@ -1,47 +1,49 @@
 <div class="page">
   <form class="card" [formGroup]="createUserForm" (ngSubmit)="onSubmit()">
     <header class="header">
-      <h1>{{ 'CREATE_USER.TITLE' | translate }}</h1>
-      <p class="subtitle">{{ 'CREATE_USER.SUBTITLE' | translate }}</p>
+      <h1>Create account</h1>
+      <p class="subtitle">Create your CFTrainer account</p>
     </header>
 
     <!-- EMAIL -->
     <label class="field">
-      <span>{{ 'CREATE_USER.EMAIL' | translate }}</span>
+      <span>Email</span>
       <input
         type="email"
         autocomplete="email"
         formControlName="email"
-        [placeholder]="'CREATE_USER.EMAIL_PLACEHOLDER' | translate"
+        placeholder="Enter your email"
       />
 
       <small
         class="error"
         *ngIf="
-          createUserForm.get('email')?.touched && createUserForm.get('email')?.hasError('required')
+          createUserForm.get('email')?.touched &&
+          createUserForm.get('email')?.hasError('required')
         "
       >
-        {{ 'CREATE_USER.ERROR_EMAIL_REQUIRED' | translate }}
+        Email is required.
       </small>
 
       <small
         class="error"
         *ngIf="
-          createUserForm.get('email')?.touched && createUserForm.get('email')?.hasError('email')
+          createUserForm.get('email')?.touched &&
+          createUserForm.get('email')?.hasError('email')
         "
       >
-        {{ 'CREATE_USER.ERROR_EMAIL_INVALID' | translate }}
+        Please enter a valid email address.
       </small>
     </label>
 
     <!-- USERNAME -->
     <label class="field">
-      <span>{{ 'CREATE_USER.USERNAME' | translate }}</span>
+      <span>Username</span>
       <input
         type="text"
         autocomplete="username"
         formControlName="username"
-        [placeholder]="'CREATE_USER.USERNAME_PLACEHOLDER' | translate"
+        placeholder="Choose a username"
       />
 
       <small
@@ -51,7 +53,7 @@
           createUserForm.get('username')?.hasError('required')
         "
       >
-        {{ 'CREATE_USER.ERROR_USERNAME_REQUIRED' | translate }}
+        Username is required.
       </small>
 
       <small
@@ -61,37 +63,38 @@
           createUserForm.get('username')?.hasError('minlength')
         "
       >
-        {{ 'CREATE_USER.ERROR_USERNAME_MIN' | translate }}
+        Username must be at least 3 characters long.
       </small>
     </label>
 
     <!-- ROLE -->
     <label class="field">
-      <span>{{ 'CREATE_USER.ROLE' | translate }}</span>
+      <span>Role</span>
 
       <select formControlName="role">
-        <option value="student">student</option>
-        <option value="coach">coach</option>
+        <option value="student">Student</option>
+        <option value="coach">Coach</option>
       </select>
 
       <small
         class="error"
         *ngIf="
-          createUserForm.get('role')?.touched && createUserForm.get('role')?.hasError('required')
+          createUserForm.get('role')?.touched &&
+          createUserForm.get('role')?.hasError('required')
         "
       >
-        {{ 'CREATE_USER.ERROR_ROLE_REQUIRED' | translate }}
+        Role is required.
       </small>
     </label>
 
     <!-- PASSWORD -->
     <label class="field">
-      <span>{{ 'CREATE_USER.PASSWORD' | translate }}</span>
+      <span>Password</span>
       <input
         type="password"
         autocomplete="new-password"
         formControlName="password"
-        [placeholder]="'CREATE_USER.PASSWORD_PLACEHOLDER' | translate"
+        placeholder="Create a password"
       />
 
       <small
@@ -101,7 +104,7 @@
           createUserForm.get('password')?.hasError('required')
         "
       >
-        {{ 'CREATE_USER.ERROR_PASSWORD_REQUIRED' | translate }}
+        Password is required.
       </small>
 
       <small
@@ -111,18 +114,18 @@
           createUserForm.get('password')?.hasError('minlength')
         "
       >
-        {{ 'CREATE_USER.ERROR_PASSWORD_MIN' | translate }}
+        Password must be at least 6 characters long.
       </small>
     </label>
 
     <!-- CONFIRM PASSWORD -->
     <label class="field">
-      <span>{{ 'CREATE_USER.CONFIRM_PASSWORD' | translate }}</span>
+      <span>Confirm password</span>
       <input
         type="password"
         autocomplete="new-password"
         formControlName="confirmPassword"
-        [placeholder]="'CREATE_USER.CONFIRM_PASSWORD_PLACEHOLDER' | translate"
+        placeholder="Repeat your password"
       />
 
       <small
@@ -132,24 +135,26 @@
           createUserForm.get('confirmPassword')?.hasError('required')
         "
       >
-        {{ 'CREATE_USER.ERROR_CONFIRM_REQUIRED' | translate }}
+        Please confirm your password.
       </small>
 
       <small
         class="error"
-        *ngIf="createUserForm.get('confirmPassword')?.touched && passwordsMismatch"
+        *ngIf="
+          createUserForm.get('confirmPassword')?.touched && passwordsMismatch
+        "
       >
-        {{ 'CREATE_USER.ERROR_PASSWORDS_MISMATCH' | translate }}
+        Passwords do not match.
       </small>
     </label>
 
     <div class="actions">
       <button class="btn btn-primary" type="submit">
-        {{ 'CREATE_USER.SUBMIT' | translate }}
+        Create account
       </button>
 
       <button class="btn btn-ghost" type="button" (click)="goToLogin()">
-        {{ 'CREATE_USER.GO_TO_LOGIN' | translate }}
+        Go to sign in
       </button>
     </div>
   </form>
