@@ -39,5 +39,6 @@ export class MyGroups {
       }
     });
     this._groupService.getMyGroupsSummary().subscribe();
+    console.log(this.groups());
   }
 }

@@ -28,15 +28,12 @@ export class Profile {
   groupList = this._groupService.groupList;
   groupsCount = computed(() => this.groupList()?.length ?? 0);
 
-  // ✅ stats reales
   stats = this._statsService.stats;
   rating = computed(() => this.stats()?.kpis.rating ?? null);
 
-  // ✅ following real (cuenta)
   followingList = this._followingService.followingList;
   following = computed(() => this.followingList().length);
 
-  // ❗ followers: ponelo null hasta que exista endpoint real
   followers = computed(() => null as number | null);
 
   constructor() {
@@ -46,13 +43,10 @@ export class Profile {
 
       if (!u || !id || id === 'none') return;
 
-      // grupos
       this._groupService.getMyGroups().subscribe();
 
-      // rating real
       this._statsService.getStudentStats(id, 'all').subscribe();
 
-      // following real
       this._followingService.getFollowing().subscribe();
     });
   }

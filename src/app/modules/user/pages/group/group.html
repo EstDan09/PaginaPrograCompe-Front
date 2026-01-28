@@ -4,14 +4,12 @@
     <div>
       <h1 class="title">{{ g.group.name }}</h1>
       <p class="owner">Owner: {{ g.group.owner.username }}</p>
-      @if(isCoach()) {
+      @if (isCoach()) {
         <button (click)="add()">Add member</button>
       }
     </div>
 
-    <button class="btn" type="button">
-      View members
-    </button>
+    <button class="btn" type="button" (click)="openMembers()">View members</button>
   </header>
 
   <p class="desc" *ngIf="g.group.description">
@@ -29,7 +27,7 @@
       <div class="row-title">{{ a.title }}</div>
 
       <div class="meta">
-       <!--  <div class="kv">
+        <!--  <div class="kv">
           <span class="k">Completed:</span>
           <span class="v">{{ a.completed ? 'Yes' : 'No' }}</span>
         </div> -->
@@ -41,7 +39,7 @@
 
         <div class="kv" *ngIf="a.due_date">
           <span class="k">Due Date:</span>
-          <span class="v">{{ a.due_date | date:"MM/dd/yyyy 'at' h:mma" }}</span>
+          <span class="v">{{ a.due_date | date: "MM/dd/yyyy 'at' h:mma" }}</span>
         </div>
       </div>
     </div>

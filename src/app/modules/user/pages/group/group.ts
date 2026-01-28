@@ -6,6 +6,8 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { AuthService } from '../../../../services/auth.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AdderDialog } from './adder-dialog/adder-dialog';
+import { GroupMembersDialog } from './group-members-dialog/group-members-dialog';
+
 
 @Component({
   selector: 'app-group',
@@ -55,15 +57,16 @@ export class Group {
 
     this.groupService.getGroupDetails(id).subscribe();
     this._authService.fetchMe().subscribe();
-
-
-
-
   }
 
   trackAssignment = (_: number, a: { _id: string }) => a._id;
 
-
-
+  openMembers() {
+    const groupId = this.route.snapshot.params['id'];
+    this.dialog.open(GroupMembersDialog, {
+      width: '560px',
+      data: { groupId },
+    });
+  }
 
 }

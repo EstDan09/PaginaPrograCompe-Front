@@ -4,15 +4,13 @@
   <section class="card">
     @if (following().length > 0) {
       <ul class="list">
-        @for (f of following(); track f.name) {
-          <li class="row">
+        @for (f of following(); track f._id) {
+          <li class="row" role="button" tabindex="0" (click)="openProfile(f)">
             <div class="avatar">
               {{ (safeName(f.name) | slice:0:1) }}
             </div>
-
-            <a class="name" [routerLink]="['/user', 'profile', safeName(f.name)]">
-              {{ safeName(f.name) }}
-            </a>
+            <div class="name">{{ safeName(f.name) }}</div>
+            <div class="chev">›</div>
           </li>
         }
       </ul>

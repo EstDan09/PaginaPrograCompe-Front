@@ -1,0 +1,31 @@
+<div class="dialog">
+  <header class="dialog__head">
+    <h2 class="title">Group members</h2>
+    <button class="x" type="button" (click)="close()">✕</button>
+  </header>
+
+  @if (loading()) {
+    <div class="loading">
+      <span class="spinner"></span>
+      <div>Loading members…</div>
+    </div>
+  } @else if (members().length  === 0) {
+    <div class="empty">
+      <div class="empty-title">No members yet</div>
+      <div class="empty-text">This group has no students added.</div>
+    </div>
+  } @else {
+    <ul class="list">
+      @for (m of members()!; track trackName($index, m)) {
+        <li class="row">
+          <div class="avatar">{{ m.slice(0, 1).toUpperCase() }}</div>
+          <div class="name">{{ m }}</div>
+        </li>
+      }
+    </ul>
+  }
+
+  <footer class="dialog__foot">
+    <button class="btn" type="button" (click)="close()">Close</button>
+  </footer>
+</div>

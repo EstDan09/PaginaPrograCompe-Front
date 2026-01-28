@@ -8,32 +8,20 @@
       <a routerLink="/user" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         home
       </a>
+      @if (role() !== 'coach') {
+        <a [routerLink]="myStatsLink()" routerLinkActive="active"> statistics </a>
+      }
+      <a [routerLink]="myGroupsLink()" routerLinkActive="active"> teams </a>
 
-      <a [routerLink]="myStatsLink()" routerLinkActive="active">
-        statistics
-      </a>
+      <a [routerLink]="myFollowsLink()" routerLinkActive="active"> friends </a>
 
-      <a [routerLink]="myGroupsLink()" routerLinkActive="active">
-        teams
-      </a>
+      <a routerLink="/user/profile" routerLinkActive="active"> profile </a>
 
-      <a [routerLink]="myFollowsLink()" routerLinkActive="active">
-        friends
-      </a>
-
-      <a routerLink="/user/profile" routerLinkActive="active">
-        profile
-      </a>
-
-      <a routerLink="/user/challenges" routerLinkActive="active">
-        challenges
-      </a>
+      <a routerLink="/user/challenges" routerLinkActive="active"> challenges </a>
 
       @if (role() !== 'coach') {
-  <a routerLink="/user/verification" routerLinkActive="active">
-    verification
-  </a>
-}
+        <a routerLink="/user/verification" routerLinkActive="active"> verification </a>
+      }
     </div>
 
     <div class="right">

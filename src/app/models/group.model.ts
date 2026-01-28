@@ -1,6 +1,12 @@
 import { IUser, IUserMini } from "./user.model";
 import { IAssignmentSummary } from "./assignment.model";
 
+export interface IStudentGroupUsername {
+  _id: string;
+  student_id: string;
+  student_username: string;
+  group_id: string;
+}
 
 
 export interface IGroup {
@@ -21,8 +27,8 @@ export interface IGroupData {
 export interface IMyGroupSummary {
   groupId: string;
   name: string;
-  owner: string;
-  membersCount: number;
+  ownerUsername: string;
+  members: number;
   role: 'Student' | 'Coach' | 'Admin';
   dueAssignments: number;
 }

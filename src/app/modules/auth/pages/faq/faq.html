@@ -1,0 +1,66 @@
+<div class="page">
+  <header class="head">
+    <div>
+      <h1 class="title">FAQ</h1>
+      <p class="sub">
+        Frequently asked questions about CFTrainer (your Codeforces companion).
+      </p>
+    </div>
+
+    <div class="search">
+      <input
+        class="input"
+        type="text"
+        placeholder="Search: rating, tags, groups, verification…"
+        [value]="query()"
+        (input)="setQuery(($any($event.target).value))"
+      />
+      @if (query()) {
+        <button class="btn-ghost" type="button" (click)="clear()">Clear</button>
+      }
+    </div>
+  </header>
+
+  <section class="card">
+    @if (filtered().length === 0) {
+      <div class="empty">
+        <div class="empty-title">No results found</div>
+        <p class="empty-text">
+          Try different keywords (e.g. “rating”, “verification”, “groups”).
+        </p>
+      </div>
+    } @else {
+      <ul class="list">
+        @for (item of filtered(); track item.q; let i = $index) {
+          <li class="item">
+            <button class="q" type="button" (click)="toggle(i)">
+              <span class="q-text">{{ item.q }}</span>
+              <span class="chev" [class.open]="openIndex() === i">⌄</span>
+            </button>
+
+            @if (openIndex() === i) {
+              <div class="a">
+                <p class="a-text">{{ item.a }}</p>
+
+                @if (item.tags?.length) {
+                  <div class="tags">
+                    @for (t of item.tags!; track t) {
+                      <span class="tag">#{{ t }}</span>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </li>
+        }
+      </ul>
+    }
+  </section>
+
+  <section class="hint-card">
+    <div class="hint-title">Still have questions?</div>
+    <p class="hint-text">
+      Let us know your question and we’ll add it to the FAQ.
+    </p>
+  </section>
+</div>
