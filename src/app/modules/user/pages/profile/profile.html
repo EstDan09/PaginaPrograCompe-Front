@@ -7,7 +7,7 @@
         <div class="kv">
           <div class="item">
             <span class="k">Rating:</span>
-            <span class="v">{{ rating() }}</span>
+            <span class="v">{{ rating() ?? "—" }}</span>
           </div>
 
           <div class="item">
@@ -17,7 +17,7 @@
 
           <div class="item">
             <span class="k">Followers:</span>
-            <span class="v">{{ followers() }}</span>
+            <span class="v">{{ followers() ?? "—" }}</span>
           </div>
 
           <div class="item">
@@ -26,7 +26,7 @@
           </div>
 
           <div class="item">
-            <span class="k">Roll:</span>
+            <span class="k">Role:</span>
             <span class="v">{{ role() === 'student' ? 'Student' : role() }}</span>
           </div>
 

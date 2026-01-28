@@ -14,7 +14,6 @@ export interface IFollowingResponse {
   following: IFollowName[];
 }
 
-
 export interface IFollowingList {
   following: IFollow[];
 }
