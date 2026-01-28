@@ -27,6 +27,9 @@ export class Group {
     this.dialog?.open(AdderDialog, {
       width: '30%',
       height: '20%',
+      data: {
+        groupId: this.route.snapshot.params['id'],
+      }
     });
     console.log("CLICKED");
   }

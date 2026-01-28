@@ -1,5 +1,5 @@
 <div class="page">
-  @if(filled()) {
+  @if(success()) {
   <div class="card">
 
     <h1>
@@ -11,6 +11,12 @@
   @else {
 
     <form class="card" [formGroup]="addForm" (ngSubmit)="onSubmit()">
+
+      @if(failed()) {
+        <h1>
+          Failed to add member. Please try again
+        </h1>
+      }
 
 
         <label class="field">

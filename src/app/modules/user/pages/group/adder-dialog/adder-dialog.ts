@@ -16,16 +16,42 @@ export class AdderDialog {
   private _dialogRef = inject(MatDialogRef<AdderDialog>);
   private _groupService = inject(GroupService);
   filled = signal<boolean>(false);
+  clicked = signal<boolean>(false);
+  failed = signal<boolean>(false);
+  success = signal<boolean>(false);
 
-  addForm = this._formBuilder.group({
-    studentName: ['', [Validators.required]],
+  data = inject(MAT_DIALOG_DATA) as {
+    groupId: string,
+  }
+
+  addForm = this._formBuilder.nonNullable.group({
+    studentName: ['', Validators.required],
   });
 
   onSubmit = () => {
 
-    if (this.addForm.invalid) return;
 
-    const studentName = this.addForm.value;
+    if (this.addForm.invalid || this.clicked()) return;
+    this.clicked.set(true);
+
+
+    const { studentName } = this.addForm.getRawValue();
+
+    this._groupService.postGroupAddMember(this.data.groupId, studentName).subscribe({
+      next: (res) => {
+        if (typeof (res as any)?.message === 'string') {
+          this.failed.set(true);
+          this.clicked.set(false);
+        } else {
+          this.success.set(true);
+        }
+      },
+      error: () => {
+        this.failed.set(true);
+        this.clicked.set(false);
+      },
+    });
+
 
   }
 

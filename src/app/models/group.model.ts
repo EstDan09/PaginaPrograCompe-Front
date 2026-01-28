@@ -56,4 +56,10 @@ export interface IGroupErr {
   message: string
 }
 
+export interface IAddition {
+  _id: string,
+  student_id: string,
+  group_id: string,
+}
+
 
