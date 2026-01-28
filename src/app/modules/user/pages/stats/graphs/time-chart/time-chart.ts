@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, computed, effect, input, ViewChild } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartType } from 'chart.js';
+
+type RatingPoint = { t: string; rating: number };
 
 @Component({
   selector: 'app-time-chart',
@@ -10,76 +12,63 @@ import { ChartConfiguration, ChartType } from 'chart.js';
   styleUrls: ['./time-chart.scss'],
 })
 export class TimeChart {
-  public lineChartType: ChartType = 'line';
+  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
-  public lineChartData: ChartConfiguration<'line', { x: string, y: number }[]>['data'] = {
+  series = input<RatingPoint[]>([]);
+  public readonly lineChartType: 'line' = 'line';
+
+  // labels + number[] (lo más compatible)
+  labels = computed(() => this.series().map(p => p.t));
+  values = computed(() => this.series().map(p => p.rating));
+
+  public lineChartData = computed<ChartConfiguration<'line'>['data']>(() => ({
+    labels: this.labels(),
     datasets: [
       {
-        label: 'Series A',
-        fill: 'origin',
-        data: [
-          { x: '2020-01-15', y: 534 },
-          { x: '2020-06-10', y: 645 },
-          { x: '2021-02-20', y: 875 },
-          { x: '2021-09-01', y: 900 },
-          { x: '2022-04-12', y: 1000 },
-          { x: '2022-11-30', y: 953 },
-          { x: '2023-07-08', y: 1203 },
-        ],
+        label: 'Rating',
+        data: this.values(),
+        fill: true,
+        tension: 0.15,
+        pointRadius: 2,
       },
     ],
-  };
+  }));
 
-
-  public lineChartOptions: ChartConfiguration['options'] = {
+  public lineChartOptions: ChartConfiguration<'line'>['options'] = {
     responsive: true,
     maintainAspectRatio: false,
-
-    elements: {
-      line: { tension: 0.1 },
-    },
-
+    interaction: { mode: 'nearest', intersect: false },
+    plugins: { legend: { display: true } },
     scales: {
-      y: { position: 'left' },
-      y1: { position: 'right' },
-    },
-
-    animations: {
-      x: {
-        duration: 800,
-        easing: 'easeOutQuart',
-      },
-      y: {
-        duration: 800,
-        easing: 'easeOutQuart',
-      },
-    },
-
-    interaction: {
-      mode: 'nearest'
-    },
-
-    plugins: {
-      legend: { display: true },
-
-      tooltip: {
-        enabled: true,
-        callbacks: {
-          label: (ctx) => `Value: ${ctx.parsed.y}`,
-        },
-      },
-
-      annotation: {
-        annotations: [
-          {
-            type: 'line',
-            scaleID: 'x',
-            borderColor: 'orange',
-            borderWidth: 2,
-          },
-        ],
-      },
+      x: { ticks: { maxRotation: 0, autoSkip: true } },
+      y: { beginAtZero: false },
     },
   };
+
+  constructor() {
+  effect(() => {
+    const s = this.series();
+
+    console.log('[TimeChart] series len:', s?.length);
+    console.log('[TimeChart] first:', s?.[0]);
+    console.log('[TimeChart] last:', s?.[s.length - 1]);
+
+    const labels = this.labels();
+    const values = this.values();
+
+    console.log('[TimeChart] labels sample:', labels.slice(0, 3));
+    console.log('[TimeChart] values sample:', values.slice(0, 3));
+    console.log('[TimeChart] values types:', values.slice(0, 3).map(v => typeof v));
+
+    // Si hay NaN esto te lo delata de inmediato
+    console.log('[TimeChart] has NaN?', values.some(v => Number.isNaN(v)));
+
+    queueMicrotask(() => {
+      console.log('[TimeChart] chart instance?', !!this.chart?.chart);
+      this.chart?.update();
+    });
+  });
 }
 
+
+}
