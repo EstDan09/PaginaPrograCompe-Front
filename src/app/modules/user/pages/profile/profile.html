@@ -1,53 +1,85 @@
 <div class="page">
   <section class="profile-card">
     @if (user()) {
-      <div class="left">
-        <h1 class="name">{{ username() }}</h1>
-
-        <div class="kv">
-          <div class="item">
-            <span class="k">Rating:</span>
-            <span class="v">{{ rating() ?? "—" }}</span>
-          </div>
-
-          <div class="item">
-            <span class="k">Following:</span>
-            <span class="v">{{ following() }}</span>
-          </div>
-
-          <div class="item">
-            <span class="k">Followers:</span>
-            <span class="v">{{ followers() ?? "—" }}</span>
-          </div>
-
-          <div class="item">
-            <span class="k">E-mail:</span>
-            <span class="v">{{ email() }}</span>
-          </div>
-
-          <div class="item">
-            <span class="k">Role:</span>
-            <span class="v">{{ role() === 'student' ? 'Student' : role() }}</span>
-          </div>
-
-          <div class="item">
-            <span class="k">Groups:</span>
-            <span class="v">{{ groupsCount() }}</span>
-          </div>
+      <header class="head">
+        <div class="head-left">
+          <h1 class="name">{{ username() }}</h1>
+          <p class="sub">Your account details</p>
         </div>
 
+        <div class="head-right">
+          @if (!editing()) {
+            <button class="btn btn--ghost" type="button" (click)="openEdit()">
+              Edit
+            </button>
+          } @else {
+            <button class="btn btn--ghost" type="button" (click)="cancelEdit()" [disabled]="saving()">
+              Cancel
+            </button>
+          }
+        </div>
+      </header>
+
+      <div class="kv">
+        <div class="item">
+          <span class="k">Username</span>
+          <span class="v mono">{{ username() }}</span>
+        </div>
+
+        <div class="item">
+          <span class="k">E-mail</span>
+          <span class="v">{{ email() }}</span>
+        </div>
+
+        <div class="item">
+          <span class="k">Role</span>
+          <span class="v">{{ roleLabel() }}</span>
+        </div>
+      </div>
+
+      @if (editing()) {
+        <div class="edit">
+          <div class="field">
+            <label class="label">New e-mail</label>
+            <input
+              class="input"
+              type="email"
+              [value]="editEmail()"
+              (input)="editEmail.set(($any($event.target).value))"
+              placeholder="you@example.com"
+            />
+          </div>
+
+          <div class="field">
+            <label class="label">New password</label>
+            <input
+              class="input"
+              type="password"
+              [value]="editPassword()"
+              (input)="editPassword.set(($any($event.target).value))"
+              placeholder="Leave empty to keep current password"
+            />
+          </div>
+
+          <div class="edit-actions">
+            <button class="btn btn--primary" type="button" (click)="save()" [disabled]="saving()">
+              @if (saving()) { Saving… } @else { Save changes }
+            </button>
+          </div>
+
+          @if (msg()) {
+            <div class="note">{{ msg() }}</div>
+          }
+        </div>
+      } @else {
         <div class="actions">
-          <a class="btn" routerLink="/user/stats">View stats</a>
+          <a class="btn btn--primary" routerLink="/user/stats">Go to stats</a>
         </div>
-      </div>
-
-      <div class="right">
-        <img class="avatar" src="assets/donut.png" alt="Profile image" />
-      </div>
+      }
     } @else {
       <div class="empty">
-        <div class="empty-title">No hay sesión activa</div>
-        <p class="empty-text">Iniciá sesión para ver tu perfil.</p>
+        <div class="empty-title">No active session</div>
+        <p class="empty-text">Log in to view your profile.</p>
       </div>
     }
   </section>

@@ -13,7 +13,12 @@
         improvement
       </p>
 
-      <a class="cta" routerLink="/auth/login">Start tracking</a>
+
+      @if (user()) {
+        <a class="cta" routerLink="/user/stats">Start tracking</a>
+      } @else {
+        <a class="cta" routerLink="/auth/login">Start tracking</a>
+      }
     </div>
 
     <div class="hero__right">
