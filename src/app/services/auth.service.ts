@@ -8,7 +8,6 @@ type AuthResponse = { token: string };
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-
   private _http = inject(HttpClient);
 
   private _token = signal<string | null>(null);
@@ -26,7 +25,6 @@ export class AuthService {
 
   constructor() {
     const storedToken = localStorage.getItem('token');
-
     if (storedToken) {
       this._token.set(storedToken);
       this.fetchMe().subscribe();
@@ -66,6 +64,28 @@ export class AuthService {
         if (err instanceof HttpErrorResponse && err.status === 401) {
           this.clearSession();
         }
+        return of(null);
+      })
+    );
+  }
+
+  updateMe(payload: { email?: string; password?: string }) {
+    const body: { email?: string; password?: string } = {};
+
+    const email = (payload.email ?? '').trim();
+    const password = (payload.password ?? '').trim();
+
+    if (email) body.email = email;
+    if (password) body.password = password;
+
+    if (!body.email && !body.password) return of(null);
+
+    return this._http.put<IUser>(`${environment.apiUrl}/user/update`, body).pipe(
+      tap((safeUser) => {
+        this._user.set({ ...(this._user() as IUser), ...(safeUser as any) });
+      }),
+      catchError((err) => {
+        console.log('[AuthService] updateMe error:', err);
         return of(null);
       })
     );

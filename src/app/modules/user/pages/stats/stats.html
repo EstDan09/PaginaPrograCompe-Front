@@ -1,12 +1,11 @@
 <div class="page">
   <div class="wrap">
-
     @if (loading()) {
       <section class="loading-card">
         <span class="spinner"></span>
-        <div>
-          <div class="loading-title">Cargando estadísticas…</div>
-          <div class="loading-sub">Esto puede tomar unos segundos.</div>
+        <div class="loading-text">
+          <div class="loading-title">Fetching your stats</div>
+          <div class="loading-sub">This may take a few seconds</div>
         </div>
       </section>
     } @else if (error()) {
@@ -15,8 +14,6 @@
         <div class="error-sub">{{ error() }}</div>
       </section>
     } @else if (data(); as d) {
-
-      <!-- KPIs -->
       <section class="kpis">
         <div class="kpi">
           <div class="kpi-title">Rating</div>
@@ -34,23 +31,18 @@
         </div>
       </section>
 
-      <!-- Rating Graph -->
       <section class="card">
         <h2 class="card-title">Rating Graph</h2>
 
-        <!-- ✅ pasá la data al chart -->
         <app-time-chart [series]="d.ratingGraph.series"></app-time-chart>
       </section>
 
-      <!-- Solves by rating -->
       <section class="card">
         <h2 class="card-title">Solves by rating</h2>
 
-        <!-- ✅ pasá bins al chart -->
         <app-bar-chart [bins]="d.solvesByRating.bins"></app-bar-chart>
       </section>
 
-      <!-- Tags -->
       <section class="card">
         <h2 class="card-title">Tags</h2>
 
@@ -63,17 +55,14 @@
           }
         </div>
       </section>
-
     } @else {
-      <!-- estado inicial por si aún no hay userId -->
       <section class="loading-card">
         <span class="spinner"></span>
-        <div>
-          <div class="loading-title">Preparando tu perfil…</div>
-          <div class="loading-sub">Esperando tu sesión.</div>
+        <div class="loading-text">
+          <div class="loading-title">Preparing your dashboard</div>
+          <div class="loading-sub">Waiting for your session</div>
         </div>
       </section>
     }
-
   </div>
 </div>

@@ -17,7 +17,48 @@
   gap: 16px;
 }
 
-/* KPI cards row */
+.loading-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  border-radius: 10px;
+  background: #f7f7fb;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+}
+
+.loading-text {
+  display: grid;
+  gap: 4px;
+}
+
+.loading-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.loading-sub {
+  font-size: 13px;
+  opacity: 0.75;
+}
+
+/* nicer spinner */
+.spinner {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 3px solid rgba(0, 0, 0, 0.15);
+  border-top-color: #3b82f6; /* blue accent */
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
 .kpis {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

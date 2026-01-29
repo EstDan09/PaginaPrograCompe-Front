@@ -2,8 +2,8 @@
   <section class="card">
     <header class="hero">
       <div class="hero__text">
-        <h1 class="hero__title">Verificación</h1>
-        <p class="hero__subtitle">Conectá y verificá tu cuenta de Codeforces</p>
+        <h1 class="hero__title">Verification</h1>
+        <p class="hero__subtitle">Connect and verify your Codeforces account</p>
       </div>
 
       <div class="hero__badge">
@@ -15,8 +15,8 @@
       <div class="state state--empty">
         <div class="state__icon">🔒</div>
         <div class="state__body">
-          <div class="state__title">No hay sesión activa</div>
-          <p class="state__text">Iniciá sesión para verificar tu cuenta.</p>
+          <div class="state__title">No active session</div>
+          <p class="state__text">Log in to verify your account.</p>
         </div>
       </div>
     } @else {
@@ -24,7 +24,7 @@
       @if (loading()) {
         <div class="toast toast--loading">
           <span class="spinner"></span>
-          <span>Cargando...</span>
+          <span>Loading…</span>
         </div>
       }
 
@@ -46,67 +46,72 @@
             </div>
 
             <div class="status__item">
-              <span class="k">Estado</span>
+              <span class="k">Status</span>
               @if (acc.is_verified_flag) {
-                <span class="badge badge--ok">Verificado ✔</span>
+                <span class="badge badge--ok">Verified ✔</span>
               } @else {
-                <span class="badge badge--warn">No verificado</span>
+                <span class="badge badge--warn">Not verified</span>
               }
             </div>
           </div>
         </div>
 
-        <!-- Panel: actualizar handle -->
+        <!-- Update handle -->
         <div class="panel">
           <div class="panel__head">
-            <h2 class="panel__title">Actualizar handle</h2>
-            <p class="panel__hint">Si tu handle cambió, actualizalo antes de verificar.</p>
+            <h2 class="panel__title">Update handle</h2>
+            <p class="panel__hint">If your handle changed, update it before verifying.</p>
           </div>
 
           <div class="form">
             <div class="field">
-              <label class="label">Nuevo handle</label>
+              <label class="label">New handle</label>
               <input
                 class="input"
                 type="text"
-                placeholder="ej: tourist"
+                placeholder="e.g. tourist"
                 [value]="newHandle()"
                 (input)="newHandle.set(($any($event.target).value))"
               />
             </div>
 
             <button class="btn btn--primary" (click)="updateHandle()" [disabled]="loading()">
-              Guardar handle
+              Save handle
             </button>
           </div>
         </div>
 
-        <!-- flujo de verificación -->
+        <!-- Verification flow -->
         @if (!acc.is_verified_flag) {
 
           <div class="grid">
-            <!-- Paso 1 -->
+
+            <!-- Step 1 -->
             <div class="panel panel--soft">
               <div class="step">
                 <div class="step__num">1</div>
                 <div class="step__body">
-                  <h2 class="step__title">Iniciar verificación</h2>
+                  <h2 class="step__title">Start verification</h2>
                   <p class="step__text">
-                    Genera un token y te da una instrucción (ejercicio/código) para completar en Codeforces.
+                    We’ll generate a token and a Codeforces problem code.
                   </p>
+
+                  <div class="note">
+                    <b>Time limit:</b> 2 minutes
+                    @if (startData()) {
+                      <span class="note__sep">•</span>
+                      <span class="mono">Remaining: {{ mmss() }}</span>
+                    }
+                  </div>
                 </div>
               </div>
 
               <button class="btn btn--primary" (click)="start()" [disabled]="loading()">
-                Iniciar
+                Start
               </button>
 
               @if (startData(); as s) {
                 <div class="box">
-                  <div class="box__row">
-                    <span class="k">verification_token</span>
-                    <span class="v mono">{{ s.verification_token }}</span>
-                  </div>
 
                   <div class="box__row">
                     <span class="k">cf_code</span>
@@ -114,42 +119,41 @@
                   </div>
 
                   <p class="box__hint">
-                    Hacé lo que te pide el sistema en Codeforces usando el <b>cf_code</b>.
-                    Luego pegá el <b>verification_token</b> en el paso 2.
+                    Submit a <b>Compilation Error</b> to this problem on Codeforces:
+                    <b class="mono">{{ s.cf_code }}</b>.
                   </p>
                 </div>
               }
             </div>
 
-            <!-- Paso 2 -->
+            <!-- Step 2 -->
             <div class="panel panel--soft">
               <div class="step">
                 <div class="step__num">2</div>
                 <div class="step__body">
-                  <h2 class="step__title">Finalizar verificación</h2>
+                  <h2 class="step__title">Finish verification</h2>
                   <p class="step__text">
-                    Cuando ya cumpliste la condición en Codeforces, pegá el token acá y finalizá.
+                    Once you’ve submitted the Compilation Error on Codeforces, press the button below.
+                    (The token is filled automatically.)
                   </p>
                 </div>
               </div>
 
-              <div class="form">
-                <div class="field">
-                  <label class="label">Verification token</label>
-                  <input
-                    class="input"
-                    type="text"
-                    placeholder="Pegá el verification token"
-                    [value]="verifyToken()"
-                    (input)="verifyToken.set(($any($event.target).value))"
-                  />
-                </div>
+              <button
+                class="btn btn--primary"
+                (click)="end()"
+                [disabled]="loading() || !startData() || remainingSec() === 0"
+              >
+                Finish verification
+              </button>
 
-                <button class="btn" (click)="end()" [disabled]="loading()">
-                  Finalizar
-                </button>
-              </div>
+              @if (remainingSec() === 0) {
+                <p class="muted">
+                  Time expired. Start verification again to get a new token.
+                </p>
+              }
             </div>
+
           </div>
 
         } @else {
@@ -157,8 +161,8 @@
             <div class="state state--ok">
               <div class="state__icon">✅</div>
               <div class="state__body">
-                <div class="state__title">¡Listo!</div>
-                <p class="state__text">Tu cuenta ya está verificada. 🎉</p>
+                <div class="state__title">Done!</div>
+                <p class="state__text">Your account is verified. 🎉</p>
               </div>
             </div>
           </div>
@@ -168,10 +172,8 @@
         <div class="state state--warn">
           <div class="state__icon">⚠️</div>
           <div class="state__body">
-            <div class="state__title">No se encontró tu cuenta de Codeforces</div>
-            <p class="state__text">
-              Revisá que tu backend cree el documento al registrar.
-            </p>
+            <div class="state__title">No Codeforces account found</div>
+            <p class="state__text">Make sure the backend creates the document on register.</p>
           </div>
         </div>
       }

@@ -4,32 +4,43 @@
       <span class="brand__name">CFTrainer</span>
     </div>
 
-    <div class="tabs">
-      <a routerLink="/user" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-        home
-      </a>
-      @if (role() !== 'coach') {
-        <a [routerLink]="myStatsLink()" routerLinkActive="active"> statistics </a>
-      }
-      <a [routerLink]="myGroupsLink()" routerLinkActive="active"> teams </a>
+    @if (user()) {
+      <div class="tabs">
+        <a routerLink="/user" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          home
+        </a>
 
-      <a [routerLink]="myFollowsLink()" routerLinkActive="active"> friends </a>
+        @if (role() !== 'coach') {
+          <a [routerLink]="myStatsLink()" routerLinkActive="active"> statistics </a>
+        }
 
-      <a routerLink="/user/profile" routerLinkActive="active"> profile </a>
+        <a [routerLink]="myGroupsLink()" routerLinkActive="active"> teams </a>
 
-      <a routerLink="/user/challenges" routerLinkActive="active"> challenges </a>
+        @if (role() !== 'coach') {
+          <a [routerLink]="myFollowsLink()" routerLinkActive="active"> friends </a>
+        }
 
-      @if (role() !== 'coach') {
-        <a routerLink="/user/verification" routerLinkActive="active"> verification </a>
-      }
-    </div>
+        <a routerLink="/user/profile" routerLinkActive="active"> profile </a>
+
+        @if (role() !== 'coach') {
+          <a routerLink="/user/challenges" routerLinkActive="active"> challenges </a>
+        }
+
+        @if (role() !== 'coach') {
+          <a routerLink="/user/verification" routerLinkActive="active"> verification </a>
+        }
+      </div>
+    }
 
     <div class="right">
       @if (user()) {
-        <span class="user">👤 {{ user()!.username }}</span>
-        <button class="btn-ghost" type="button" (click)="onLogout()">Salir</button>
+        <span class="user"> {{ user()!.username }}</span>
+        <button class="btn-ghost" type="button" (click)="onLogout()">Logout</button>
       } @else {
-        <a class="btn-ghost" routerLink="/auth/login">Inicie sesión</a>
+        <a class="login-btn" routerLink="/auth/login">
+          <span class="icon"></span>
+          <span>Login</span>
+        </a>
       }
     </div>
   </div>

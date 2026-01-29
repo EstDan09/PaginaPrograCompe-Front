@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -8,5 +9,7 @@ import { RouterLink } from '@angular/router';
   styleUrl: './home.scss',
 })
 export class Home {
-  
+  private _authService = new AuthService();
+
+  user = this._authService.user;
 }

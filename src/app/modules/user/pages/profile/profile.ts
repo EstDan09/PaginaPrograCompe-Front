@@ -1,10 +1,6 @@
-import { Component, computed, effect, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-
 import { AuthService } from '../../../../services/auth.service';
-import { GroupService } from '../../../../services/group.service';
-import { StatsService } from '../../../../services/stats.service';
-import { FollowingService } from '../../../../services/following.service';
 
 @Component({
   selector: 'app-profile',
@@ -13,41 +9,59 @@ import { FollowingService } from '../../../../services/following.service';
   styleUrl: './profile.scss',
 })
 export class Profile {
-  private _authService = inject(AuthService);
-  private _groupService = inject(GroupService);
-  private _statsService = inject(StatsService);
-  private _followingService = inject(FollowingService);
+  private _auth = inject(AuthService);
 
-  user = this._authService.user;
+  user = this._auth.user;
+  username = this._auth.username;
+  email = this._auth.email;
+  role = this._auth.role;
 
-  username = this._authService.username;
-  email = this._authService.email;
-  role = this._authService.role;
-  userId = this._authService.userId;
+  editing = signal(false);
+  saving = signal(false);
+  msg = signal<string | null>(null);
 
-  groupList = this._groupService.groupList;
-  groupsCount = computed(() => this.groupList()?.length ?? 0);
+  editEmail = signal('');
+  editPassword = signal('');
 
-  stats = this._statsService.stats;
-  rating = computed(() => this.stats()?.kpis.rating ?? null);
+  roleLabel = computed(() => {
+    const r = this.role();
+    if (r === 'student') return 'Student';
+    if (r === 'coach') return 'Coach';
+    return String(r ?? '—');
+  });
 
-  followingList = this._followingService.followingList;
-  following = computed(() => this.followingList().length);
+  openEdit() {
+    this.msg.set(null);
+    this.editEmail.set(this.email());
+    this.editPassword.set('');
+    this.editing.set(true);
+  }
 
-  followers = computed(() => null as number | null);
+  cancelEdit() {
+    this.msg.set(null);
+    this.editPassword.set('');
+    this.editing.set(false);
+  }
 
-  constructor() {
-    effect(() => {
-      const u = this.user();
-      const id = this.userId();
+  save() {
+    this.msg.set(null);
 
-      if (!u || !id || id === 'none') return;
+    const email = this.editEmail().trim();
+    const password = this.editPassword().trim();
 
-      this._groupService.getMyGroups().subscribe();
+    this.saving.set(true);
 
-      this._statsService.getStudentStats(id, 'all').subscribe();
+    this._auth.updateMe({ email, password }).subscribe((res) => {
+      this.saving.set(false);
 
-      this._followingService.getFollowing().subscribe();
+      if (!res) {
+        this.msg.set('Could not update your profile.');
+        return;
+      }
+
+      this.msg.set('Profile updated.');
+      this.editPassword.set('');
+      this.editing.set(false);
     });
   }
 }

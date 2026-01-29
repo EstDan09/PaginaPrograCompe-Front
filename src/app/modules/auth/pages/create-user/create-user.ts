@@ -1,13 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslatePipe, TranslateService } from "@ngx-translate/core";
+import { TranslateService } from "@ngx-translate/core";
 import { FormBuilder, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'app-create-user',
-  imports: [CommonModule, TranslatePipe, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './create-user.html',
   styleUrl: './create-user.scss',
 })
