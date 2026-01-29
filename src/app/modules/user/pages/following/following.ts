@@ -40,8 +40,9 @@ export class Following {
     console.log(f.student_id); //aca sale el id undefined
 
     this._dialog.open(FollowingProfileDialog, {
-      width: '520px',
-      maxWidth: '92vw',
+      width: '720px',
+      maxWidth: '100vw',
+      panelClass: 'cf-profile-dialog',
       data: {
         userId: f.student_id,
         username: this.safeName(f.name),

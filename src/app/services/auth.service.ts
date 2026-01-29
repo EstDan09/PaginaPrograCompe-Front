@@ -42,7 +42,7 @@ export class AuthService {
     );
   }
 
-  register(data: { username: string; password: string; role: 'student' | 'coach'; email?: string }) {
+  register(data: { username: string; password: string; role: 'student' | 'coach'; email?: string; cf_account?: string }) {
     return this._http.post<AuthResponse>(`${environment.apiUrl}/auth/register`, data).pipe(
       tap(({ token }) => this.setToken(token)),
       switchMap(() => this.fetchMe()),
@@ -52,6 +52,7 @@ export class AuthService {
       })
     );
   }
+
 
   logout() {
     this.clearSession();
