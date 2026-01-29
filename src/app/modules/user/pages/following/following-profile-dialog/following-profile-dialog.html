@@ -5,94 +5,86 @@
       <div class="sub">@{{ username() }}</div>
     </div>
 
-    <button class="x" type="button" (click)="close()">✕</button>
   </header>
 
-  @if (loading()) {
-    <div class="state">
-      <span class="spinner"></span>
-      <div>
-        <div class="state-title">Loading profile…</div>
-        <div class="state-sub">Fetching stats from the server.</div>
-      </div>
-    </div>
-  } @else if (error()) {
-    <div class="alert">
-      <div class="alert-title">Couldn’t load profile</div>
-      <div class="alert-text">{{ error() }}</div>
-    </div>
-
-    <footer class="foot">
-      <button class="btn" type="button" (click)="close()">Close</button>
-    </footer>
-  } @else if (data(); as d) {
-
-    <section class="hero">
-      <div class="avatar">
-        {{ (cfHandle().slice(0,1) || 'U').toUpperCase() }}
-      </div>
-
-      <div class="hero-meta">
-        <div class="name mono">{{ cfHandle() }}</div>
-        <div class="pill">{{ role() }}</div>
-      </div>
-
-      <a class="btn ghost" [routerLink]="['/user','profile', username()]" (click)="close()">
-        Open profile
-      </a>
-    </section>
-
-    <section class="kpis">
-      <div class="kpi">
-        <div class="k">Rating</div>
-        <div class="v">{{ d.kpis.rating  }}</div>
-      </div>
-
-      <div class="kpi">
-        <div class="k">Solved</div>
-        <div class="v">{{ d.kpis.solvedTotal }}</div>
-      </div>
-
-      <div class="kpi">
-        <div class="k">Streak</div>
-        <div class="v">{{ d.kpis.streakDays }} days</div>
-      </div>
-    </section>
-
-    <section class="panel">
-      <div class="panel-title">Top tags</div>
-
-      @if (topTags().length) {
-        <div class="tags">
-          @for (t of topTags(); track t.tag) {
-            <div class="tag">
-              <span class="tag-name">{{ t.tag }}</span>
-              <span class="tag-val mono">{{ t.solved }}</span>
-            </div>
-          }
+  <div class="body">
+    @if (loading()) {
+      <div class="state state--loading">
+        <span class="spinner"></span>
+        <div>
+          <div class="state-title">Loading profile</div>
+          <div class="state-sub">Fetching stats from the server…</div>
         </div>
-      } @else {
-        <p class="muted">No tags available yet.</p>
-      }
-    </section>
-
-    <footer class="foot">
-      <button class="btn" type="button" (click)="close()">Close</button>
-      <a class="btn primary" [routerLink]="['/user','stats']" (click)="close()">
-        Go to my stats
-      </a>
-    </footer>
-
-  } @else {
-    <div class="state">
-      <div>
-        <div class="state-title">No data</div>
-        <div class="state-sub">This user has no stats yet.</div>
       </div>
-    </div>
 
-    <footer class="foot">
-      <button class="btn" type="button" (click)="close()">Close</button>
-    </footer>
-  }
+    } @else if (error()) {
+      <div class="alert">
+        <div class="alert-title">Couldn’t load profile</div>
+        <div class="alert-text">{{ error() }}</div>
+      </div>
+
+    } @else if (data(); as d) {
+
+      <section class="hero">
+        <div class="avatar" aria-hidden="true">
+          {{ (cfHandle().slice(0,1) || 'U').toUpperCase() }}
+        </div>
+
+        <div class="hero-meta">
+          <div class="name mono">{{ cfHandle() }}</div>
+          <div class="meta-line">
+            <span class="chip">{{ role() }}</span>
+            <span class="dot">•</span>
+            <span class="muted">friend preview</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="kpis">
+        <div class="kpi">
+          <div class="k">Rating</div>
+          <div class="v">{{ d.kpis.rating }}</div>
+        </div>
+
+        <div class="kpi">
+          <div class="k">Solved</div>
+          <div class="v">{{ d.kpis.solvedTotal }}</div>
+        </div>
+
+        <div class="kpi">
+          <div class="k">Streak</div>
+          <div class="v">{{ d.kpis.streakDays }} days</div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title">Top tags</div>
+
+        @if (topTags().length) {
+          <div class="tags">
+            @for (t of topTags(); track t.tag) {
+              <div class="tag">
+                <span class="tag-name">{{ t.tag }}</span>
+                <span class="tag-val mono">{{ t.solved }}</span>
+              </div>
+            }
+          </div>
+        } @else {
+          <p class="muted">No tags available yet.</p>
+        }
+      </section>
+
+    } @else {
+      <div class="state">
+        <div>
+          <div class="state-title">No data</div>
+          <div class="state-sub">This user has no stats yet.</div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <footer class="foot">
+    <button class="btn primary" type="button" (click)="close()">Close</button>
+  </footer>
 </div>

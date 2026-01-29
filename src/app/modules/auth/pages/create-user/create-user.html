@@ -15,23 +15,11 @@
         placeholder="Enter your email"
       />
 
-      <small
-        class="error"
-        *ngIf="
-          createUserForm.get('email')?.touched &&
-          createUserForm.get('email')?.hasError('required')
-        "
-      >
+      <small class="error" *ngIf="createUserForm.get('email')?.touched && createUserForm.get('email')?.hasError('required')">
         Email is required.
       </small>
 
-      <small
-        class="error"
-        *ngIf="
-          createUserForm.get('email')?.touched &&
-          createUserForm.get('email')?.hasError('email')
-        "
-      >
+      <small class="error" *ngIf="createUserForm.get('email')?.touched && createUserForm.get('email')?.hasError('email')">
         Please enter a valid email address.
       </small>
     </label>
@@ -46,23 +34,11 @@
         placeholder="Choose a username"
       />
 
-      <small
-        class="error"
-        *ngIf="
-          createUserForm.get('username')?.touched &&
-          createUserForm.get('username')?.hasError('required')
-        "
-      >
+      <small class="error" *ngIf="createUserForm.get('username')?.touched && createUserForm.get('username')?.hasError('required')">
         Username is required.
       </small>
 
-      <small
-        class="error"
-        *ngIf="
-          createUserForm.get('username')?.touched &&
-          createUserForm.get('username')?.hasError('minlength')
-        "
-      >
+      <small class="error" *ngIf="createUserForm.get('username')?.touched && createUserForm.get('username')?.hasError('minlength')">
         Username must be at least 3 characters long.
       </small>
     </label>
@@ -70,20 +46,33 @@
     <!-- ROLE -->
     <label class="field">
       <span>Role</span>
-
       <select formControlName="role">
         <option value="student">Student</option>
         <option value="coach">Coach</option>
       </select>
 
-      <small
-        class="error"
-        *ngIf="
-          createUserForm.get('role')?.touched &&
-          createUserForm.get('role')?.hasError('required')
-        "
-      >
+      <small class="error" *ngIf="createUserForm.get('role')?.touched && createUserForm.get('role')?.hasError('required')">
         Role is required.
+      </small>
+    </label>
+
+    <!-- ✅ CODEFORCES HANDLE (only for student) -->
+    <label class="field" *ngIf="isStudent">
+      <span>Codeforces handle</span>
+      <input
+        type="text"
+        autocomplete="off"
+        formControlName="cf_account"
+        placeholder="e.g. tourist"
+      />
+      <small class="hint">Required for students (used to verify your Codeforces account).</small>
+
+      <small class="error" *ngIf="createUserForm.get('cf_account')?.touched && createUserForm.get('cf_account')?.hasError('required')">
+        Codeforces handle is required for students.
+      </small>
+
+      <small class="error" *ngIf="createUserForm.get('cf_account')?.touched && createUserForm.get('cf_account')?.hasError('minlength')">
+        Handle looks too short.
       </small>
     </label>
 
@@ -97,23 +86,11 @@
         placeholder="Create a password"
       />
 
-      <small
-        class="error"
-        *ngIf="
-          createUserForm.get('password')?.touched &&
-          createUserForm.get('password')?.hasError('required')
-        "
-      >
+      <small class="error" *ngIf="createUserForm.get('password')?.touched && createUserForm.get('password')?.hasError('required')">
         Password is required.
       </small>
 
-      <small
-        class="error"
-        *ngIf="
-          createUserForm.get('password')?.touched &&
-          createUserForm.get('password')?.hasError('minlength')
-        "
-      >
+      <small class="error" *ngIf="createUserForm.get('password')?.touched && createUserForm.get('password')?.hasError('minlength')">
         Password must be at least 6 characters long.
       </small>
     </label>
@@ -128,22 +105,11 @@
         placeholder="Repeat your password"
       />
 
-      <small
-        class="error"
-        *ngIf="
-          createUserForm.get('confirmPassword')?.touched &&
-          createUserForm.get('confirmPassword')?.hasError('required')
-        "
-      >
+      <small class="error" *ngIf="createUserForm.get('confirmPassword')?.touched && createUserForm.get('confirmPassword')?.hasError('required')">
         Please confirm your password.
       </small>
 
-      <small
-        class="error"
-        *ngIf="
-          createUserForm.get('confirmPassword')?.touched && passwordsMismatch
-        "
-      >
+      <small class="error" *ngIf="createUserForm.get('confirmPassword')?.touched && passwordsMismatch">
         Passwords do not match.
       </small>
     </label>

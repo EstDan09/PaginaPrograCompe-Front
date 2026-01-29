@@ -43,3 +43,21 @@ $font-sans: 'Inter', 'Roboto', 'Open Sans', system-ui, sans-serif;
   --shadow-color: #E8E8E8;
   font-family: $font-sans;
 }
+
+.cf-profile-dialog {
+  .mat-mdc-dialog-surface {
+    padding: 22px;              /* 👈 evita que se corte */
+    border-radius: 22px;
+    overflow: hidden;           /* mantiene el borde bonito */
+    box-sizing: border-box;
+  }
+
+  /* opcional: si querés menos “aire” en mobile */
+  @media (max-width: 560px) {
+    .mat-mdc-dialog-surface {
+      padding: 16px;
+      border-radius: 18px;
+    }
+  }
+}
+
