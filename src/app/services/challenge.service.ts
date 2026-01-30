@@ -21,7 +21,6 @@ export class ChallengeService {
   private _error = signal<string | null>(null);
   error = this._error.asReadonly();
 
-  // ✅ estado para "ask"
   private _askLoading = signal(false);
   askLoading = this._askLoading.asReadonly();
 
