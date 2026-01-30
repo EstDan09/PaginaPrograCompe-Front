@@ -31,15 +31,20 @@ export class Following {
 
     return list.filter((f) => {
       const name = this.safeName(f.name).toLowerCase();
-      const id = String((f as any).student_id ?? '').toLowerCase();
-      return name.includes(q) || id.includes(q);
+      const sid = String((f as any).student_id ?? '').toLowerCase();
+      return name.includes(q) || sid.includes(q);
     });
   });
 
   followUsername = signal('');
   followBusy = this._followingService.busy;
+
   followError = signal<string | null>(null);
   followOk = signal<string | null>(null);
+
+  unfollowBusyId = signal<string | null>(null);
+  unfollowError = signal<string | null>(null);
+  unfollowOk = signal<string | null>(null);
 
   constructor() {
     this._followingService.getFollowing().subscribe();
@@ -52,6 +57,22 @@ export class Following {
   safeName(name: unknown): string {
     const s = String(name ?? '').trim();
     return s.length ? s : 'unknown';
+  }
+
+  followRelId(f: IFollowName): string {
+    const anyF = f as any;
+    return String(anyF._id ?? anyF.following_id ?? anyF.id ?? '');
+  }
+
+  trackFollow(f: IFollowName): string {
+    const rel = this.followRelId(f);
+    return rel || String((f as any).student_id ?? this.safeName(f.name));
+  }
+
+
+  isUnfollowBusy(f: IFollowName): boolean {
+    const rel = this.followRelId(f);
+    return !!rel && this.unfollowBusyId() === rel;
   }
 
   openProfile(f: IFollowName) {
@@ -75,6 +96,11 @@ export class Following {
     this.followOk.set(null);
   }
 
+  clearUnfollowMessages() {
+    this.unfollowError.set(null);
+    this.unfollowOk.set(null);
+  }
+
   follow() {
     this.clearFollowMessages();
 
@@ -91,13 +117,12 @@ export class Following {
       }
 
       const myId = this._auth.userId();
-
       if (myId && myId !== 'none' && target._id === myId) {
         this.followError.set("You can't follow yourself.");
         return;
       }
 
-      this._followingService.createFollowing(target._id /*, myId*/).subscribe((res) => {
+      this._followingService.createFollowing(target._id).subscribe((res) => {
         if (!res) {
           this.followError.set(this._followingService.error() ?? 'Could not follow this user.');
           return;
@@ -107,6 +132,32 @@ export class Following {
         this.followUsername.set('');
         this._followingService.getFollowing().subscribe();
       });
+    });
+  }
+
+  unfollow(f: IFollowName) {
+    this.clearUnfollowMessages();
+
+    const followId = this.followRelId(f);
+    if (!followId) {
+      this.unfollowError.set(
+        'no hay id pa'
+      );
+      return;
+    }
+
+    this.unfollowBusyId.set(followId);
+
+    this._followingService.deleteFollowing(followId).subscribe((res) => {
+      this.unfollowBusyId.set(null);
+
+      if (!res) {
+        this.unfollowError.set(this._followingService.error() ?? 'Could not unfollow this user.');
+        return;
+      }
+
+      this.unfollowOk.set(`Unfollowed ${this.safeName(f.name)}`);
+      this._followingService.getFollowing().subscribe();
     });
   }
 }

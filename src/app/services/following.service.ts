@@ -6,7 +6,7 @@ import { IFollowingResponse, IFollowName } from '../models/following-list.model'
 
 type CreateFollowingBody = {
   student_2_id: string;
-  student_1_id?: string; 
+  student_1_id?: string;
 };
 
 @Injectable({ providedIn: 'root' })
@@ -25,6 +25,10 @@ export class FollowingService {
 
   clearError() {
     this._error.set(null);
+  }
+
+  private setError(err: any, fallback: string) {
+    this._error.set(err?.error?.message ?? err?.message ?? fallback);
   }
 
   getFollowing() {
@@ -46,11 +50,26 @@ export class FollowingService {
     this._error.set(null);
 
     return this._http.post<any>(`${this._URL}/create`, body).pipe(
-      tap(() => {
-      }),
       catchError((err) => {
         console.log('[FollowingService] createFollowing error:', err);
-        this._error.set(err?.error?.message ?? 'Could not follow this user.');
+        this.setError(err, 'Could not follow this user.');
+        return of(null);
+      }),
+      finalize(() => this._busy.set(false))
+    );
+  }
+
+  deleteFollowing(followingId: string) {
+    const id = String(followingId ?? '').trim();
+    if (!id) return of(null);
+
+    this._busy.set(true);
+    this._error.set(null);
+
+    return this._http.delete<any>(`${this._URL}/delete/${id}`).pipe(
+      catchError((err) => {
+        console.log('[FollowingService] deleteFollowing error:', err);
+        this.setError(err, 'Could not unfollow this user.');
         return of(null);
       }),
       finalize(() => this._busy.set(false))
