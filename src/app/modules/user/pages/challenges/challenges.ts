@@ -23,12 +23,10 @@ export class Challenges {
   pendingChallenges = this._challengesSvc.pending;
   completedChallenges = this._challengesSvc.completed;
 
-  // ✅ ask state from service
   askLoading = this._challengesSvc.askLoading;
   askError = this._challengesSvc.askError;
   asked = this._challengesSvc.asked;
 
-  // ✅ filters for ask
   minRating = signal<number | null>(800);
   maxRating = signal<number | null>(1400);
   tags = signal(''); // "dp,greedy" etc.
