@@ -8,6 +8,31 @@
       Create group
     </button>
   }
+  @else {
+    <form class="form-card" [formGroup]="groupCode" (ngSubmit)="joinGroup()">
+      <h2 class="group-title">Join a team</h2>
+      <p class="subtitle">Enter the invite code shared with you</p>
+
+      <div class="input-group">
+        <input
+          type="text"
+          autocomplete="off"
+          formControlName="code"
+          placeholder="Enter invite code"
+          class="code-input"
+        />
+      </div>
+
+      <button class="subButt" type="submit">
+        Join Group
+      </button>
+    </form>
+
+
+
+
+  }
+
 
   @if (groups()?.length) {
     <div class="stack">

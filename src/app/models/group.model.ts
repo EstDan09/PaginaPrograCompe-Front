@@ -72,4 +72,10 @@ export interface IInvite {
   invite_code: string,
 }
 
+export interface IGroupJoin {
+  _id: string,
+  student_id: string,
+  group_id: string,
+}
+
 

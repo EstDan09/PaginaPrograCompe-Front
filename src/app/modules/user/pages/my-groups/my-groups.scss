@@ -14,6 +14,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 .creator {
@@ -154,5 +155,86 @@
 
   .group-name {
     font-size: 15px;
+  }
+}
+
+
+
+
+
+.form-card {
+  background: #ffffff;
+  padding: 3rem;
+  border-radius: 18px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 28px 60px rgba(0, 0, 0, 0.12);
+  }
+}
+
+.group-title {
+  text-align: center;
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.subtitle {
+  text-align: center;
+  margin: 0;
+  opacity: 0.7;
+  font-size: 0.95rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.code-input {
+  padding: 0.9rem 1rem;
+  border-radius: 10px;
+  border: 2px solid #e0e4ef;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  outline: none;
+
+  &:focus {
+    border-color: #6c8cff;
+    box-shadow: 0 0 0 3px rgba(108, 140, 255, 0.15);
+  }
+
+  &::placeholder {
+    opacity: 0.6;
+  }
+}
+
+.subButt {
+  margin-top: 1rem;
+  padding: 0.9rem;
+  border-radius: 10px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: linear-gradient(135deg, #5A9CB5, #4a6cf7);
+  color: white;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(74, 108, 247, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: none;
   }
 }

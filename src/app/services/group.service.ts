@@ -3,7 +3,8 @@ import {
   IGroup, IGroupData, IGroupDetails,
   IMyGroupSummary, ICreatedGroup,
   IAddition, IGroupErr,
-  IStudentGroupUsername, IInvite
+  IStudentGroupUsername, IInvite,
+  IGroupJoin
 } from '../models/group.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -21,8 +22,10 @@ export class GroupService {
   _CREATE = `${environment.apiUrl}/group/create`;
   _ADD = `${environment.apiUrl}/student-group/add-member`;
   _DEL_GROUP = `${environment.apiUrl}/group/delete/`;
-  _CREATE_GROUP = `${environment.apiUrl}/group/create-invite-code/`
+  _CREATE_GROUP = `${environment.apiUrl}/group/create-invite-code/`;
+  _JOIN_GROUP = `${environment.apiUrl}/student-group/use-invite-code/`;
   _http: HttpClient = inject(HttpClient);
+
 
   private _groupList = signal<IGroup[] | null>(null);
   readonly groupList = this._groupList.asReadonly();
@@ -140,6 +143,13 @@ export class GroupService {
 
   postCreateCode(groupId: string) {
     return this._http.post<IInvite | IGroupErr>(`${this._CREATE_GROUP}${groupId}`, groupId);
+  }
+
+  postJoinGroupCode(code: string) {
+    const body = {
+      invite_code: code
+    }
+    return this._http.post<IGroupJoin | IGroupErr>(this._JOIN_GROUP, body);
   }
 
 
