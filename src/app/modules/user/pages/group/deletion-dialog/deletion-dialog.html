@@ -1,0 +1,16 @@
+<div class="page">
+  @if(success()) {
+    <h2>Deletion successfull, going back to teams page</h2>
+  }
+  @else {
+
+    @if(failed()) {
+      <h2>{{ errMsg() }}</h2>
+    }
+    <h2>Confirm Deletion</h2>
+    <div class="buttCont">
+      <button class="deletor" (click)="onSubmit()">Delete</button>
+    </div>
+  }
+
+</div>

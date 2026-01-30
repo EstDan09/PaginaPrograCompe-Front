@@ -1,6 +1,8 @@
 import { inject, Injectable, signal, computed } from '@angular/core';
-import { IGroup, IGroupData, IGroupDetails, 
-  IMyGroupSummary, ICreatedGroup, IAddition, IGroupErr, IStudentGroupUsername } from '../models/group.model';
+import {
+  IGroup, IGroupData, IGroupDetails,
+  IMyGroupSummary, ICreatedGroup, IAddition, IGroupErr, IStudentGroupUsername
+} from '../models/group.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { catchError, of, tap } from 'rxjs';
@@ -16,6 +18,7 @@ export class GroupService {
   _ALTER = `${environment.apiUrl}/group/get`;
   _CREATE = `${environment.apiUrl}/group/create`;
   _ADD = `${environment.apiUrl}/student-group/add-member`;
+  _DEL_GROUP = `${environment.apiUrl}/group/delete/`;
   _http: HttpClient = inject(HttpClient);
 
   private _groupList = signal<IGroup[] | null>(null);
@@ -126,6 +129,10 @@ export class GroupService {
       student_username: studentName,
     };
     return this._http.post<IAddition | IGroupErr>(this._ADD, body).pipe();
+  }
+
+  deleteGroup(gruopId: string) {
+    return this._http.delete<IGroupErr>(`${this._DEL_GROUP}${gruopId}`);
   }
 
 
