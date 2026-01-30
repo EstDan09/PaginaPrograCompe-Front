@@ -1,23 +1,86 @@
 <div class="page">
-  <h1 class="title">Following</h1>
+  <div class="top">
+    <h1 class="title">Following</h1>
+
+    <div class="search">
+      <span class="search__icon">⌕</span>
+
+      <input
+        class="search__input"
+        type="text"
+        placeholder="Search users…"
+        [value]="query()"
+        (input)="query.set(($any($event.target).value))"
+      />
+
+      @if (query()) {
+        <button class="search__clear" type="button" (click)="clearSearch()" aria-label="Clear search">
+          ✕
+        </button>
+      }
+    </div>
+  </div>
+
+  <section class="card card--follow">
+    <div class="follow">
+      <div class="follow__left">
+        <div class="follow__title">Follow a user</div>
+        <div class="follow__sub">Type a username to start following.</div>
+      </div>
+
+      <div class="follow__form">
+        <input
+          class="follow__input"
+          type="text"
+          placeholder="e.g. tourist"
+          [value]="followUsername()"
+          (input)="followUsername.set(($any($event.target).value)); clearFollowMessages()"
+          (keydown.enter)="follow()"
+        />
+
+        <button class="btn btn--primary" type="button" (click)="follow()" [disabled]="followBusy()">
+          Follow
+        </button>
+      </div>
+    </div>
+
+    @if (followError()) {
+      <div class="msg msg--err">{{ followError() }}</div>
+    }
+
+    @if (followOk()) {
+      <div class="msg msg--ok">{{ followOk() }}</div>
+    }
+  </section>
 
   <section class="card">
-    @if (following().length > 0) {
+    @if (following().length === 0) {
+      <div class="empty">
+        <p class="empty-text">Fetching your following list…</p>
+      </div>
+
+    } @else if (filtered().length === 0) {
+      <div class="empty">
+        <p class="empty-text">No user found</p>
+      </div>
+
+    } @else {
       <ul class="list">
-        @for (f of following(); track f.student_id) {
+        @for (f of filtered(); track f.student_id) {
           <li class="row" role="button" tabindex="0" (click)="openProfile(f)">
             <div class="avatar">
               {{ (safeName(f.name) | slice:0:1) }}
             </div>
-            <div class="name">{{ safeName(f.name) }}</div>
-            <div class="chev">›</div>
+
+            <div class="name">
+              {{ safeName(f.name) }}
+              <div class="meta mono">@{{ f.student_id }}</div>
+            </div>
+
+            <div class="chev" aria-hidden="true">›</div>
           </li>
         }
       </ul>
-    } @else {
-      <div class="empty">
-        <p class="empty-text">No estás siguiendo a nadie todavía.</p>
-      </div>
     }
   </section>
 </div>
