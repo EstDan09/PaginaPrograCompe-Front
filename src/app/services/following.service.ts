@@ -1,8 +1,13 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { catchError, of, tap } from 'rxjs';
+import { catchError, finalize, of, tap } from 'rxjs';
 import { IFollowingResponse, IFollowName } from '../models/following-list.model';
+
+type CreateFollowingBody = {
+  student_2_id: string;
+  student_1_id?: string; 
+};
 
 @Injectable({ providedIn: 'root' })
 export class FollowingService {
@@ -12,6 +17,16 @@ export class FollowingService {
   private _followingList = signal<IFollowName[]>([]);
   readonly followingList = this._followingList.asReadonly();
 
+  private _busy = signal(false);
+  readonly busy = this._busy.asReadonly();
+
+  private _error = signal<string | null>(null);
+  readonly error = this._error.asReadonly();
+
+  clearError() {
+    this._error.set(null);
+  }
+
   getFollowing() {
     return this._http.get<IFollowingResponse>(this._URL).pipe(
       tap((res) => this._followingList.set(res.following ?? [])),
@@ -20,6 +35,25 @@ export class FollowingService {
         this._followingList.set([]);
         return of(null);
       })
+    );
+  }
+
+  createFollowing(student2Id: string, student1Id?: string) {
+    const body: CreateFollowingBody = { student_2_id: student2Id };
+    if (student1Id) body.student_1_id = student1Id;
+
+    this._busy.set(true);
+    this._error.set(null);
+
+    return this._http.post<any>(`${this._URL}/create`, body).pipe(
+      tap(() => {
+      }),
+      catchError((err) => {
+        console.log('[FollowingService] createFollowing error:', err);
+        this._error.set(err?.error?.message ?? 'Could not follow this user.');
+        return of(null);
+      }),
+      finalize(() => this._busy.set(false))
     );
   }
 }
