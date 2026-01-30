@@ -73,7 +73,7 @@ export class MyGroups {
         this.failed.set(true);
         this.clicked.set(false);
         this.clicked.set(false);
-        this.joinRes(bruh.message);
+        this.joinRes("You're already in this group or the code is expired or wrong");
       },
 
 
