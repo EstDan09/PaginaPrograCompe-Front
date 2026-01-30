@@ -7,3 +7,11 @@ export interface IChallenge {
   createdAt?: string;   
   updatedAt?: string; 
 }
+
+export interface IAskChallengeResponse {
+  cf_code: string;
+  name: string;
+  rating: number;
+  contestId: number;
+  tags: string[];
+}
