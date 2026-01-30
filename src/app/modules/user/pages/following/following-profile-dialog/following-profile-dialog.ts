@@ -1,7 +1,6 @@
 import { Component, Inject, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { RouterLink } from '@angular/router';
 import { StatsService } from '../../../../../services/stats.service';
 import { IStatsMeResponse } from '../../../../../models/stats.model';
 import { catchError, of, tap } from 'rxjs';
@@ -11,7 +10,7 @@ type DialogData = { userId: string; username: string };
 @Component({
   selector: 'app-following-profile-dialog',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, RouterLink],
+  imports: [CommonModule, MatDialogModule],
   templateUrl: './following-profile-dialog.html',
   styleUrl: './following-profile-dialog.scss',
 })

@@ -2,10 +2,11 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, of, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { IChallenge } from '../models/challenge.model';
+import { IChallenge, IAskChallengeResponse } from '../models/challenge.model';
 
 type GetChallengesResponse = { challenges: IChallenge[] };
 type CreateChallengeResponse = { message: string; challenge: IChallenge };
+
 
 @Injectable({ providedIn: 'root' })
 export class ChallengeService {
@@ -19,6 +20,21 @@ export class ChallengeService {
 
   private _error = signal<string | null>(null);
   error = this._error.asReadonly();
+
+  // ✅ estado para "ask"
+  private _askLoading = signal(false);
+  askLoading = this._askLoading.asReadonly();
+
+  private _askError = signal<string | null>(null);
+  askError = this._askError.asReadonly();
+
+  private _asked = signal<IAskChallengeResponse | null>(null);
+  asked = this._asked.asReadonly();
+
+  clearAskState() {
+    this._askError.set(null);
+    this._asked.set(null);
+  }
 
   refreshMyChallenges() {
     this._loading.set(true);
@@ -35,11 +51,6 @@ export class ChallengeService {
     );
   }
 
-  /**
-   * Student: POST /challenge/create
-   * Body: { cf_code }
-   * Resp: { message, challenge }
-   */
   createChallenge(cf_code: string) {
     this._error.set(null);
 
@@ -58,16 +69,12 @@ export class ChallengeService {
     );
   }
 
-  /**
-   * PUT /challenge/verify/:id
-   * Resp: IChallenge (actualizado)
-   */
   verifyChallenge(challengeId: string) {
     this._error.set(null);
 
     return this._http.put<IChallenge>(
       `${environment.apiUrl}/challenge/verify/${challengeId}`,
-      {} // backend no ocupa body
+      {}
     ).pipe(
       tap(updated => {
         this._challenges.update(list =>
@@ -81,9 +88,6 @@ export class ChallengeService {
     );
   }
 
-  /**
-   * DELETE /challenge/delete/:id
-   */
   deleteChallenge(challengeId: string) {
     this._error.set(null);
 
@@ -97,6 +101,30 @@ export class ChallengeService {
         this._error.set(err?.error?.message ?? 'No se pudo eliminar el challenge');
         return of(null);
       })
+    );
+  }
+
+  askChallenge(opts?: { min_rating?: number; max_rating?: number; tags?: string }) {
+    this._askLoading.set(true);
+    this._askError.set(null);
+
+    const params: any = {};
+    const min = opts?.min_rating;
+    const max = opts?.max_rating;
+    const tags = (opts?.tags ?? '').trim();
+
+    if (typeof min === 'number' && !Number.isNaN(min)) params.min_rating = min;
+    if (typeof max === 'number' && !Number.isNaN(max)) params.max_rating = max;
+    if (tags) params.tags = tags;
+
+    return this._http.get<IAskChallengeResponse>(`${environment.apiUrl}/challenge/ask`, { params }).pipe(
+      tap((res) => this._asked.set(res)),
+      catchError((err) => {
+        this._askError.set(err?.error?.message ?? 'Could not fetch a random challenge');
+        this._asked.set(null);
+        return of(null);
+      }),
+      tap(() => this._askLoading.set(false))
     );
   }
 

@@ -21,7 +21,6 @@
     </header>
 
     @if (user()) {
-
       @if (error()) {
         <div class="alert">
           <div class="alert-title">Failed to load challenges</div>
@@ -30,8 +29,6 @@
       }
 
       <div class="grid">
-
-        <!-- Pending -->
         <section class="panel">
           <div class="panel-head">
             <h2>Pending</h2>
@@ -60,14 +57,11 @@
           } @else {
             <div class="empty">
               <div class="empty-title">Nothing pending 🎉</div>
-              <p class="empty-text">
-                Add a new challenge from the panel on the right.
-              </p>
+              <p class="empty-text">Add a new challenge from the panel on the right.</p>
             </div>
           }
         </section>
 
-        <!-- Completed -->
         <section class="panel">
           <div class="panel-head">
             <h2>Completed</h2>
@@ -90,14 +84,89 @@
           } @else {
             <div class="empty">
               <div class="empty-title">No completed challenges yet</div>
-              <p class="empty-text">
-                Once you verify one, it will appear here.
-              </p>
+              <p class="empty-text">Once you verify one, it will appear here.</p>
             </div>
           }
         </section>
 
-        <!-- Add challenge -->
+        <section class="panel add">
+          <div class="panel-head">
+            <h2>Random challenge</h2>
+            <span class="hint-mini">Filters</span>
+          </div>
+
+          <div class="add-box">
+            <div class="input-row">
+              <input
+                class="input mono"
+                type="number"
+                placeholder="Min rating"
+                [value]="minRating() ?? ''"
+                (input)="setMinRating($any($event.target).value)"
+              />
+
+              <input
+                class="input mono"
+                type="number"
+                placeholder="Max rating"
+                [value]="maxRating() ?? ''"
+                (input)="setMaxRating($any($event.target).value)"
+              />
+            </div>
+
+            <div class="input-row" style="margin-top: 10px">
+              <input
+                class="input"
+                type="text"
+                placeholder="Tags (comma-separated) e.g. dp,greedy"
+                [value]="tags()"
+                (input)="tags.set($any($event.target).value)"
+              />
+
+              <button class="btn primary" (click)="askRandom()" [disabled]="askLoading()">
+                @if (askLoading()) {
+                  <span class="spinner"></span>
+                  Asking…
+                } @else {
+                  Ask
+                }
+              </button>
+            </div>
+
+            @if (askError()) {
+              <div class="alert" style="margin-top: 10px">
+                <div class="alert-title">Couldn’t fetch a problem</div>
+                <div class="alert-text">{{ askError() }}</div>
+              </div>
+            }
+
+            @if (asked(); as a) {
+              <div class="toast" style="margin-top: 10px">
+                <div class="mono" style="font-weight: 800">{{ a.cf_code }} • {{ a.rating }}</div>
+                <div style="opacity: 0.85; margin-top: 4px">
+                  {{ a.name }}
+                </div>
+                @if (a.tags.length) {
+                  <div style="opacity: 0.75; margin-top: 6px">Tags: {{ a.tags.join(', ') }}</div>
+                }
+
+                <div class="input-row" style="margin-top: 10px">
+                  <button class="btn primary" (click)="addAskedToPending()">Add to pending</button>
+
+                  <a
+                    class="btn"
+                    target="_blank"
+                    rel="noreferrer"
+                    [href]="cfProblemUrl(a) || 'https://codeforces.com/problemset'"
+                  >
+                    Open on Codeforces
+                  </a>
+                </div>
+              </div>
+            }
+          </div>
+        </section>
+
         <section class="panel add">
           <div class="panel-head">
             <h2>Add challenge</h2>
@@ -114,22 +183,17 @@
                 type="text"
                 placeholder="e.g. 1230A"
                 [value]="newCode()"
-                (input)="newCode.set(($any($event.target).value))"
+                (input)="newCode.set($any($event.target).value)"
                 (keydown.enter)="addChallenge()"
               />
 
-              <button
-                class="btn primary"
-                (click)="addChallenge()"
-                [disabled]="loading()"
-              >
+              <button class="btn primary" (click)="addChallenge()" [disabled]="loading()">
                 Add
               </button>
             </div>
 
             <p class="tip">
-              Tip: use the format <span class="mono">1230A</span> /
-              <span class="mono">1851C</span>.
+              Tip: use the format <span class="mono">1230A</span> / <span class="mono">1851C</span>.
             </p>
 
             @if (localMsg()) {
@@ -137,9 +201,7 @@
             }
           </div>
         </section>
-
       </div>
-
     } @else {
       <div class="empty">
         <div class="empty-title">No active session</div>
