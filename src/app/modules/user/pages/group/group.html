@@ -48,9 +48,12 @@
       </div>
     </div>
   </section>
-  <div class="delCont">
-    <a>
-      <button class="deletor" (click)="delGroup()">Delete group</button>
-    </a>
-  </div>
+  @if(isCoach()) {
+    <div class="delCont">
+      <a>
+        <button class="deletor" (click)="delGroup()">Delete group</button>
+      </a>
+    </div>
+  }
+
 </div>
