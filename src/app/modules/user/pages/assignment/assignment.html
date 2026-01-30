@@ -15,8 +15,10 @@
 
       @if (exercises().length) {
         <ol class="problem-list">
-          @for (ex of exercises(); track ex.problem_id) {
-            <li class="problem-item">{{ ex.problem_id }}</li>
+          @for (ex of exercises(); track $index) {
+            <a [href]="createLink($index)" target="_blank" rel="noopener noreferrer" >
+              <li class="problem-item">{{ ex.problem_id }}</li>
+            </a>
           }
         </ol>
       } @else {

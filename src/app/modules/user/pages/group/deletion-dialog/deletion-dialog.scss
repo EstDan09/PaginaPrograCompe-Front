@@ -1,0 +1,26 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.buttCont {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.deletor {
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: lightcoral;
+  color: #0a2430;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.deletor:hover {
+  filter: brightness(0.98);
+}

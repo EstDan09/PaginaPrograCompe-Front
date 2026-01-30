@@ -7,8 +7,8 @@
 
       @if(isCoach()) {
         <div class="buttCont">
-          <button (click)="add()">Add member</button>
-          <button (click)="addAssign()">Create assignment</button>
+          <button class="btn" (click)="add()">Add member</button>
+          <button class="btn" (click)="addAssign()">Create assignment</button>
         </div>
       }
     </div>
@@ -48,4 +48,9 @@
       </div>
     </div>
   </section>
+  <div class="delCont">
+    <a>
+      <button class="deletor" (click)="delGroup()">Delete group</button>
+    </a>
+  </div>
 </div>

@@ -8,6 +8,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AdderDialog } from './adder-dialog/adder-dialog';
 import { GroupMembersDialog } from './group-members-dialog/group-members-dialog';
 import { AssignmentDialog } from './assignment-dialog/assignment-dialog';
+import { DeletionDialog } from './deletion-dialog/deletion-dialog';
 
 @Component({
   selector: 'app-group',
@@ -40,6 +41,16 @@ export class Group {
     this.dialog?.open(AssignmentDialog, {
       width: '50%',
       height: '60%',
+      data: {
+        groupId: this.route.snapshot.params['id'],
+      },
+    })
+  }
+
+  delGroup = () => {
+    this.dialog?.open(DeletionDialog, {
+      width: '50%',
+      height: '35%',
       data: {
         groupId: this.route.snapshot.params['id'],
       },
