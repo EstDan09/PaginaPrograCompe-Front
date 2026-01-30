@@ -44,6 +44,12 @@
       </section>
 
       <section class="card">
+        <h2 class="card-title">Solves by tag (top 10 tags)</h2>
+
+        <app-donut-chart [data]="topTenTags()"></app-donut-chart>
+      </section>
+
+      <section class="card">
         <h2 class="card-title">Tags</h2>
 
         <div class="tags">
