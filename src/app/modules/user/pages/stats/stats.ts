@@ -24,12 +24,10 @@ export class Stats {
   loading = this._statsService.loading;
   error = this._statsService.error;
 
-  // KPIs (solo cuando hay data)
   rating = computed(() => this.data()?.kpis.rating);
   solved = computed(() => this.data()?.kpis.solvedTotal);
   streakDays = computed(() => this.data()?.kpis.streakDays);
 
-  // series
   solvesByRating = computed<SolveBin[]>(() =>
     (this.data()?.solvesByRating.bins ?? []).map(b => ({ label: b.label, solved: b.solved }))
   );

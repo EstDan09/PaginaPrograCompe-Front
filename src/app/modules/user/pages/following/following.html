@@ -1,6 +1,9 @@
 <div class="page">
   <div class="top">
-    <h1 class="title">Following</h1>
+    <div class="top__left">
+      <h1 class="title">Following</h1>
+      <p class="subtitle">Manage your following list.</p>
+    </div>
 
     <div class="search">
       <span class="search__icon">⌕</span>
@@ -14,7 +17,12 @@
       />
 
       @if (query()) {
-        <button class="search__clear" type="button" (click)="clearSearch()" aria-label="Clear search">
+        <button
+          class="search__clear"
+          type="button"
+          (click)="clearSearch()"
+          aria-label="Clear search"
+        >
           ✕
         </button>
       }
@@ -22,10 +30,10 @@
   </div>
 
   <section class="card card--follow">
-    <div class="follow">
+    <div class="card__body follow">
       <div class="follow__left">
         <div class="follow__title">Follow a user</div>
-        <div class="follow__sub">Type a username to start following.</div>
+        <div class="follow__sub">Type a username and hit Follow.</div>
       </div>
 
       <div class="follow__form">
@@ -39,7 +47,12 @@
         />
 
         <button class="btn btn--primary" type="button" (click)="follow()" [disabled]="followBusy()">
-          Follow
+          @if (followBusy()) {
+            <span class="mini-spinner" aria-hidden="true"></span>
+            <span>Following…</span>
+          } @else {
+            <span>Follow</span>
+          }
         </button>
       </div>
     </div>
@@ -56,6 +69,7 @@
   <section class="card">
     @if (following().length === 0) {
       <div class="empty">
+        <span class="big-spinner" aria-hidden="true"></span>
         <p class="empty-text">Fetching your following list…</p>
       </div>
 
@@ -65,19 +79,44 @@
       </div>
 
     } @else {
+
+      @if (unfollowError()) {
+        <div class="msg msg--err msg--top">{{ unfollowError() }}</div>
+      }
+      @if (unfollowOk()) {
+        <div class="msg msg--ok msg--top">{{ unfollowOk() }}</div>
+      }
+
       <ul class="list">
-        @for (f of filtered(); track f.student_id) {
-          <li class="row" role="button" tabindex="0" (click)="openProfile(f)">
-            <div class="avatar">
+        @for (f of filtered(); track trackFollow(f)) {
+          <li class="row" tabindex="0" role="button" (click)="openProfile(f)">
+            <div class="avatar" aria-hidden="true">
               {{ (safeName(f.name) | slice:0:1) }}
             </div>
 
-            <div class="name">
-              {{ safeName(f.name) }}
-              <div class="meta mono">@{{ f.student_id }}</div>
+            <div class="who">
+              <div class="who__name">{{ safeName(f.name) }}</div>
+              <div class="who__meta mono">@{{ f.student_id }}</div>
             </div>
 
-            <div class="chev" aria-hidden="true">›</div>
+            <div class="row__right">
+              <button
+                class="chip chip--danger"
+                type="button"
+                (click)="$event.stopPropagation(); unfollow(f)"
+                [disabled]="isUnfollowBusy(f)"
+                aria-label="Unfollow user"
+              >
+                @if (isUnfollowBusy(f)) {
+                  <span class="mini-spinner" aria-hidden="true"></span>
+                  <span>Unfollowing…</span>
+                } @else {
+                  <span>Unfollow</span>
+                }
+              </button>
+
+              <div class="chev" aria-hidden="true">›</div>
+            </div>
           </li>
         }
       </ul>
