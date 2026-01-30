@@ -1,7 +1,9 @@
 import { inject, Injectable, signal, computed } from '@angular/core';
 import {
   IGroup, IGroupData, IGroupDetails,
-  IMyGroupSummary, ICreatedGroup, IAddition, IGroupErr, IStudentGroupUsername
+  IMyGroupSummary, ICreatedGroup,
+  IAddition, IGroupErr,
+  IStudentGroupUsername, IInvite
 } from '../models/group.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
@@ -19,6 +21,7 @@ export class GroupService {
   _CREATE = `${environment.apiUrl}/group/create`;
   _ADD = `${environment.apiUrl}/student-group/add-member`;
   _DEL_GROUP = `${environment.apiUrl}/group/delete/`;
+  _CREATE_GROUP = `${environment.apiUrl}/group/create-invite-code/`
   _http: HttpClient = inject(HttpClient);
 
   private _groupList = signal<IGroup[] | null>(null);
@@ -133,6 +136,10 @@ export class GroupService {
 
   deleteGroup(gruopId: string) {
     return this._http.delete<IGroupErr>(`${this._DEL_GROUP}${gruopId}`);
+  }
+
+  postCreateCode(groupId: string) {
+    return this._http.post<IInvite | IGroupErr>(`${this._CREATE_GROUP}${groupId}`, groupId);
   }
 
 

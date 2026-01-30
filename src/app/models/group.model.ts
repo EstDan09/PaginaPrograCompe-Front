@@ -68,4 +68,8 @@ export interface IAddition {
   group_id: string,
 }
 
+export interface IInvite {
+  invite_code: string,
+}
+
 

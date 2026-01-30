@@ -9,6 +9,8 @@ import { AdderDialog } from './adder-dialog/adder-dialog';
 import { GroupMembersDialog } from './group-members-dialog/group-members-dialog';
 import { AssignmentDialog } from './assignment-dialog/assignment-dialog';
 import { DeletionDialog } from './deletion-dialog/deletion-dialog';
+import { CodeDialog } from './code-dialog/code-dialog';
+import { IGroupErr, IInvite } from '../../../../models/group.model';
 
 @Component({
   selector: 'app-group',
@@ -20,6 +22,7 @@ export class Group {
   private _authService = inject(AuthService);
   loaded = signal<boolean>(false);
   filled = signal<boolean>(false);
+  clicked = signal<boolean>(false);
   route = inject(ActivatedRoute);
   groupService = inject(GroupService);
   groupDetails = this.groupService.groupDetails;
@@ -46,6 +49,47 @@ export class Group {
       },
     })
   }
+
+  openCode = (code: string) => {
+    this.dialog?.open(CodeDialog, {
+      width: '90%',
+      height: '60%',
+      data: {
+        code: code,
+      },
+    })
+
+  }
+
+  createCode = () => {
+    if (this.clicked()) {
+      return;
+    }
+    this.clicked.set(true);
+
+    this.groupService.postCreateCode(this.route.snapshot.params['id']).subscribe({
+
+      next: (res) => {
+        if (typeof (res as any)?.message === 'string') {
+          const bruh = res as IGroupErr;
+          this.openCode(bruh.message);
+
+        } else {
+          const bruh = res as IInvite;
+          this.openCode(bruh.invite_code);
+        }
+        this.clicked.set(false);
+
+      },
+      error: () => {
+      },
+
+    });
+
+
+  }
+
+
 
   delGroup = () => {
     this.dialog?.open(DeletionDialog, {
