@@ -11,7 +11,8 @@ export class AssignmentService {
 
   private _assignmentURL = `${environment.apiUrl}/assignment/get`;
   private _exerciseURL = `${environment.apiUrl}/exercise/get`;
-  private _CREATE = `${environment.apiUrl}/assignment/create-with-exercises`
+  private _CREATE = `${environment.apiUrl}/assignment/create-with-exercises`;
+  private _CHECK = `${environment.apiUrl}/assignment/check-completed/`;
 
   private _assignment = signal<IAssignmentData | null>(null);
   readonly assignment = this._assignment.asReadonly();
@@ -97,6 +98,15 @@ export class AssignmentService {
 
     }
     return this._http.post<ICreateAssign | IGroupErr>(this._CREATE, req);
-
   }
+
+  getCheckAssignment(assignmentId: string) {
+    return this._http.get<boolean | IGroupErr>(this._CHECK + assignmentId);
+  }
+
+
+
+
+
+
 }

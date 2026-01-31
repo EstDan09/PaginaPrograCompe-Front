@@ -26,8 +26,13 @@
       }
 
       <div class="footer">
-        <button class="btn" type="button" (click)="verify()">Verify</button>
-        <span class="status">Not completed</span>
+        @if(solved()) {
+
+          <span class="status">Status: Assignment completed</span>
+        }
+        @else {
+          <span class="status">Status: Not completed</span>
+        }
       </div>
     </div>
   } @else {

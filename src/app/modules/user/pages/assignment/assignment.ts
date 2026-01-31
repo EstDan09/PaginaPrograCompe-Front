@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AssignmentService } from '../../../../services/assignment.service';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -12,6 +12,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 export class Assignment {
   private route = inject(ActivatedRoute);
   private assignmentService = inject(AssignmentService);
+  solved = signal<boolean>(false);
 
   assignment = this.assignmentService.assignment;
   exercises = this.assignmentService.exercises;
@@ -19,6 +20,15 @@ export class Assignment {
   constructor() {
     const id = this.route.snapshot.params['id'];
     this.assignmentService.loadAssignmentScreen(id).subscribe();
+    this.assignmentService.getCheckAssignment(id).subscribe({
+      next: (res) => {
+        if (res) this.solved.set(true);
+      },
+      error: () => {
+      }
+
+    })
+
   }
 
   createLink(index: number) {
